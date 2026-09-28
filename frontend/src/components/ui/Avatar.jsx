@@ -23,15 +23,15 @@ export const Avatar = ({ src, alt = 'Avatar', size = 'md', hasStory = false, isU
     : '';
 
   return (
-    <div className={`inline-block shrink-0 ${ringStyles} ${className}`}>
+    <div className={`inline-flex shrink-0 rounded-full overflow-hidden ${ringStyles} ${className}`}>
       {src ? (
         <img
           src={src}
           alt={alt}
-          className={`${sizes[size]} rounded-full object-cover border border-white shadow-xs`}
+          className={`${sizes[size]} rounded-full object-cover aspect-square`}
         />
       ) : (
-        <div className={`${sizes[size]} rounded-full bg-rose-200 text-rose-800 font-bold flex items-center justify-center border border-white shadow-xs`}>
+        <div className={`${sizes[size]} rounded-full bg-rose-200 text-rose-800 font-bold flex items-center justify-center aspect-square`}>
           {getInitials(alt)}
         </div>
       )}

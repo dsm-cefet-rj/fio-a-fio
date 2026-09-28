@@ -1,46 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRole } from '../../context/RoleContext';
 import { Card, CardBody } from '../../components/ui/Card';
 import { Avatar } from '../../components/ui/Avatar';
 import { Button } from '../../components/ui/Button';
 import { PostCard } from '../../components/community/PostCard';
+import { CreatePostModal } from '../../components/community/CreatePostModal';
 import { MOCK_POSTS } from '../../mocks/posts';
-import { MapPin, Calendar, Edit3, UserCheck, UserPlus, Grid, Bookmark } from 'lucide-react';
+import { MapPin, Calendar, Edit3, UserCheck, UserPlus, Grid, PlusCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const ProfilePage = () => {
   const { currentUser } = useRole();
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeTab, setActiveTab] = useState('posts');
+  const [showFloatingBtn, setShowFloatingBtn] = useState(false);
+  const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 120) {
+        setShowFloatingBtn(true);
+      } else {
+        setShowFloatingBtn(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const myPosts = MOCK_POSTS.filter(
     (p) => p.author.username === currentUser.username || currentUser.role === 'creator'
   );
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-3xl mx-auto space-y-6 relative">
       {/* Profile Header Card */}
       <Card>
-        <div className="h-32 bg-gradient-to-r from-rose-400 via-pink-400 to-purple-400" />
+        <div className="h-32 bg-gradient-to-r from-rose-400 via-pink-400 to-purple-400 rounded-t-2xl" />
         <CardBody className="relative pt-0 px-6 pb-6 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-12">
             <Avatar
               src={currentUser.avatar}
               alt={currentUser.name}
               size="xl"
-              className="ring-4 ring-white"
+              className="shadow-md"
             />
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => setIsCreatePostOpen(true)}
+                className="rounded-xl shadow-sm"
+              >
+                <PlusCircle size={15} />
+                <span>Criar Publicação</span>
+              </Button>
               <Link to="/perfil/editar">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="rounded-xl">
                   <Edit3 size={14} />
                   <span>Editar Perfil</span>
                 </Button>
               </Link>
               <Button
-                variant={isFollowing ? 'secondary' : 'primary'}
+                variant={isFollowing ? 'secondary' : 'ghost'}
                 size="sm"
                 onClick={() => setIsFollowing(!isFollowing)}
+                className="rounded-xl"
               >
                 {isFollowing ? <UserCheck size={14} /> : <UserPlus size={14} />}
                 <span>{isFollowing ? 'Seguindo' : 'Seguir'}</span>
@@ -115,6 +141,29 @@ export const ProfilePage = () => {
           <PostCard key={post.id} post={post} />
         ))}
       </div>
+
+      {/* Floating Create Post Button on Scroll — Posicionado ACIMA do seletor de modo de usuário (RoleSwitcher) */}
+      <div
+        className={`fixed bottom-20 right-4 sm:right-6 z-40 transition-all duration-300 transform ${
+          showFloatingBtn
+            ? 'opacity-100 translate-y-0 pointer-events-auto scale-100'
+            : 'opacity-0 translate-y-8 pointer-events-none scale-90'
+        }`}
+      >
+        <button
+          onClick={() => setIsCreatePostOpen(true)}
+          className="flex items-center gap-2.5 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-3 px-5 sm:py-3.5 sm:px-6 rounded-full shadow-xl shadow-rose-500/30 hover:shadow-2xl hover:scale-105 border border-white/40 backdrop-blur-md transition-all duration-200 group"
+        >
+          <PlusCircle size={20} className="group-hover:rotate-90 transition-transform duration-300" />
+          <span className="text-xs sm:text-sm font-extrabold tracking-wide">Criar Publicação</span>
+        </button>
+      </div>
+
+      {/* Create Post Modal */}
+      <CreatePostModal
+        isOpen={isCreatePostOpen}
+        onClose={() => setIsCreatePostOpen(false)}
+      />
     </div>
   );
 };
