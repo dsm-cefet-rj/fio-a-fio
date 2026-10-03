@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StoryBar } from '../../components/community/StoryBar';
 import { PostCard } from '../../components/community/PostCard';
 import { PageHeader } from '../../components/ui/PageHeader';
@@ -10,35 +10,21 @@ import { useRole } from '../../context/RoleContext';
 
 export const FeedPage = () => {
   const { currentUser } = useRole();
-  const [showFloatingBtn, setShowFloatingBtn] = useState(false);
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 120) {
-        setShowFloatingBtn(true);
-      } else {
-        setShowFloatingBtn(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <div className="max-w-2xl mx-auto space-y-6 relative">
+    <div className="max-w-2xl mx-auto space-y-6 relative animate-fade-in">
       <PageHeader
-        eyebrow={`Bom dia, ${currentUser.name || 'Ana'}`}
+        eyebrow={`Bem-vinda, ${currentUser.name || 'Ana'}`}
         title="Seu cantinho de inspiração"
-        subtitle="Acompanhe quem transforma fios em histórias."
+        subtitle="Acompanhe quem transforma fios e agulhas em histórias tecidas com carinho."
         variant="rose"
       >
         <Button
-          variant="dark"
+          variant="primary"
           size="sm"
           onClick={() => setIsCreatePostOpen(true)}
-          className="shadow-md rounded-full px-4"
+          className="shadow-md rounded-full px-4 text-xs font-extrabold bg-[#E55B86] hover:bg-[#D24471]"
         >
           <PlusCircle size={16} />
           <span className="hidden sm:inline">Criar Publicação</span>
@@ -53,23 +39,6 @@ export const FeedPage = () => {
         ))}
       </div>
 
-      {/* Floating Create Post Button on Scroll — Posicionado ACIMA do seletor de modo de usuário (RoleSwitcher) */}
-      <div
-        className={`fixed bottom-20 right-4 sm:right-6 z-40 transition-all duration-300 transform ${
-          showFloatingBtn
-            ? 'opacity-100 translate-y-0 pointer-events-auto scale-100'
-            : 'opacity-0 translate-y-8 pointer-events-none scale-90'
-        }`}
-      >
-        <button
-          onClick={() => setIsCreatePostOpen(true)}
-          className="flex items-center gap-2.5 bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-bold py-3 px-5 sm:py-3.5 sm:px-6 rounded-full shadow-xl shadow-rose-500/30 hover:shadow-2xl hover:scale-105 border border-white/40 backdrop-blur-md transition-all duration-200 group"
-        >
-          <PlusCircle size={20} className="group-hover:rotate-90 transition-transform duration-300" />
-          <span className="text-xs sm:text-sm font-extrabold tracking-wide">Criar Publicação</span>
-        </button>
-      </div>
-
       {/* Create Post Modal */}
       <CreatePostModal
         isOpen={isCreatePostOpen}
@@ -78,3 +47,4 @@ export const FeedPage = () => {
     </div>
   );
 };
+

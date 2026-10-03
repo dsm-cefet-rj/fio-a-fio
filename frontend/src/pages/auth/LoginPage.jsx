@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardBody } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
+import { Logo } from '../../components/ui/Logo';
 import { Mail, Lock, LogIn } from 'lucide-react';
 import { useRole } from '../../context/RoleContext';
 
@@ -15,7 +16,7 @@ export const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setMessage('Login simulado com sucesso!');
+    setMessage('Login realizado com carinho! Bem-vinda de volta 🧶');
     switchRole('user');
     setTimeout(() => {
       navigate('/feed');
@@ -23,19 +24,21 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto py-12 px-4">
-      <Card className="shadow-lg border-rose-200">
+    <div className="max-w-md mx-auto py-12 px-4 animate-fade-in">
+      <Card className="shadow-craft border-[#EADED5] bg-white">
         <CardBody className="p-8 space-y-6">
-          <div className="text-center space-y-2">
-            <div className="text-4xl">🧶</div>
-            <h1 className="text-2xl font-extrabold text-zinc-900">Entrar no Fio a Fio</h1>
-            <p className="text-xs text-zinc-500">
-              Digite suas credenciais para acessar seu perfil e a comunidade.
+          <div className="text-center space-y-3">
+            <div className="flex justify-center mb-2">
+              <Logo size="lg" showText={false} />
+            </div>
+            <h1 className="text-2xl font-black text-[#17151A]">Entrar no Fio a Fio</h1>
+            <p className="text-xs font-medium text-[#896B70]">
+              Acesse sua conta para ver projetos, vídeos e interagir com a comunidade.
             </p>
           </div>
 
           {message && (
-            <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold rounded-xl text-center">
+            <div className="p-3.5 bg-[#FEF1F4] border border-[#EF9FB1] text-[#E55B86] text-xs font-extrabold rounded-2xl text-center">
               {message}
             </div>
           )}
@@ -61,15 +64,15 @@ export const LoginPage = () => {
               required
             />
 
-            <Button type="submit" variant="primary" fullWidth size="lg">
+            <Button type="submit" variant="primary" fullWidth size="lg" className="bg-[#E55B86] text-white">
               <LogIn size={18} />
               Entrar
             </Button>
           </form>
 
-          <div className="pt-4 border-t border-rose-50 text-center text-xs text-zinc-600">
+          <div className="pt-4 border-t border-[#EADED5] text-center text-xs text-[#896B70]">
             Ainda não possui uma conta?{' '}
-            <Link to="/cadastro" className="font-bold text-rose-600 hover:underline">
+            <Link to="/cadastro" className="font-extrabold text-[#E55B86] hover:underline">
               Criar conta
             </Link>
           </div>
@@ -78,3 +81,4 @@ export const LoginPage = () => {
     </div>
   );
 };
+

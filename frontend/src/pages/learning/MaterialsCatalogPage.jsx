@@ -45,8 +45,8 @@ export const MaterialsCatalogPage = () => {
               onClick={() => setSelectedCategory(cat)}
               className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
                 selectedCategory === cat
-                  ? 'bg-purple-600 text-white shadow-xs'
-                  : 'bg-white text-zinc-700 hover:bg-purple-50 border border-rose-100'
+                  ? 'bg-[#E55B86] text-white shadow-2xs'
+                  : 'bg-white text-[#17151A] hover:bg-[#FEF1F4] border border-[#EADED5]'
               }`}
             >
               {cat}

@@ -30,35 +30,35 @@ export const PostCard = ({ post }) => {
 
   return (
     <>
-      <Card className="mb-6 hover:border-rose-200 transition-colors">
-        <CardHeader className="flex items-center justify-between">
+      <Card className="mb-6 border-[#EADED5] hover:border-[#EF9FB1] transition-all duration-300 shadow-craft bg-white">
+        <CardHeader className="flex items-center justify-between pb-2">
           <div className="flex items-center gap-3">
-            <Avatar src={post.author.avatar} alt={post.author.name} size="md" />
+            <Avatar src={post.author.avatar} alt={post.author.name} size="md" className="border-2 border-[#EF9FB1]" />
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-bold text-sm text-zinc-900">{post.author.name}</span>
+                <span className="font-extrabold text-sm text-[#17151A]">{post.author.name}</span>
                 {post.author.verified && (
-                  <span className="text-xs bg-rose-100 text-rose-700 px-1.5 py-0.5 rounded-full font-semibold">
-                    Professora
+                  <span className="text-[10px] bg-[#FEF1F4] text-[#E55B86] px-2 py-0.5 rounded-full font-extrabold border border-[#EF9FB1]">
+                    Professora 🧶
                   </span>
                 )}
               </div>
-              <p className="text-xs text-zinc-500">{post.timeAgo} • @{post.author.username}</p>
+              <p className="text-[11px] font-medium text-[#896B70]">{post.timeAgo} • @{post.author.username}</p>
             </div>
           </div>
           {post.category && (
-            <span className="text-xs font-semibold px-2.5 py-1 bg-rose-50 text-rose-700 rounded-full border border-rose-100">
+            <span className="text-[11px] font-extrabold px-3 py-1 bg-[#FEF1F4] text-[#E55B86] rounded-full border border-[#EF9FB1] shadow-2xs">
               {post.category}
             </span>
           )}
         </CardHeader>
 
-        <CardBody className="py-3">
-          <h3 className="font-bold text-base text-zinc-900 mb-1">{post.title}</h3>
-          <p className="text-sm text-zinc-700 leading-relaxed mb-3">{post.content}</p>
+        <CardBody className="py-3.5 space-y-2.5">
+          <h3 className="font-extrabold text-base text-[#17151A] leading-snug">{post.title}</h3>
+          <p className="text-sm text-[#17151A]/85 leading-relaxed">{post.content}</p>
           {post.image && (
             <div
-              className="rounded-xl overflow-hidden border border-rose-100 my-2 cursor-pointer group"
+              className="rounded-2xl overflow-hidden border border-[#EADED5] my-3 cursor-pointer group shadow-2xs"
               onClick={() => setIsCommentsOpen(true)}
             >
               <img
@@ -70,26 +70,37 @@ export const PostCard = ({ post }) => {
           )}
         </CardBody>
 
-        <CardFooter className="flex items-center justify-between">
+        <CardFooter className="flex items-center justify-between pt-2 border-t border-[#EADED5]">
           <div className="flex items-center gap-2">
             <Button
               variant={isLiked ? 'secondary' : 'ghost'}
               size="sm"
               onClick={toggleLike}
-              className={isLiked ? 'text-rose-600 bg-rose-100 border-rose-300 font-bold' : ''}
+              className={isLiked ? 'text-[#E55B86] bg-[#FEF1F4] border-[#EF9FB1] font-extrabold shadow-2xs' : 'text-[#896B70] hover:text-[#E55B86] hover:bg-[#FEF1F4]/50'}
             >
-              <Heart size={16} className={isLiked ? 'fill-rose-500 text-rose-500' : ''} />
+              <Heart size={16} className={isLiked ? 'fill-[#E55B86] text-[#E55B86]' : ''} />
               <span>{likesCount} Curtidas</span>
             </Button>
 
-            <Button variant="ghost" size="sm" onClick={() => setIsCommentsOpen(true)}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsCommentsOpen(true)}
+              className="text-[#896B70] hover:text-[#E55B86] hover:bg-[#FEF1F4]/50"
+            >
               <MessageCircle size={16} />
               <span>{comments.length} Comentários</span>
             </Button>
           </div>
 
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="sm" onClick={() => alert('Link copiado para compartilhamento!')}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => alert('Link copiado para compartilhamento!')}
+              className="text-[#896B70] hover:text-[#E55B86] hover:bg-[#FEF1F4]/50"
+              aria-label="Compartilhar publicação"
+            >
               <Share2 size={16} />
             </Button>
           </div>

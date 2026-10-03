@@ -1,67 +1,206 @@
-import React, { useEffect, useState } from 'react';
-import { X } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { X, Play, Pause, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Avatar } from '../ui/Avatar';
+import { MOCK_STORIES } from '../../mocks/stories';
 
-export const StoryViewerModal = ({ story, onClose }) => {
+export const StoryViewerModal = ({ story: initialStory, onClose }) => {
+  const storiesList = MOCK_STORIES.filter(s => s.hasStory);
+  const [currentIndex, setCurrentIndex] = useState(() => {
+    const idx = storiesList.findIndex(s => s.id === initialStory?.id);
+    return idx >= 0 ? idx : 0;
+  });
+
+  const currentStory = storiesList[currentIndex] || initialStory || storiesList[0];
+
   const [progress, setProgress] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const isPausedRef = useRef(isPaused);
 
   useEffect(() => {
+    isPausedRef.current = isPaused;
+  }, [isPaused]);
+
+  // Timer loop for story progress
+  useEffect(() => {
+    setProgress(0);
     const timer = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(timer);
-          onClose();
-          return 100;
-        }
-        return prev + 2;
-      });
+      if (!isPausedRef.current) {
+        setProgress((prev) => {
+          if (prev >= 100) {
+            if (currentIndex < storiesList.length - 1) {
+              setCurrentIndex(c => c + 1);
+              return 0;
+            } else {
+              clearInterval(timer);
+              onClose();
+              return 100;
+            }
+          }
+          return prev + 1.5;
+        });
+      }
     }, 100);
 
     return () => clearInterval(timer);
-  }, [onClose]);
+  }, [currentIndex, onClose, storiesList.length]);
 
-  if (!story) return null;
+  const handleNext = (e) => {
+    if (e) e.stopPropagation();
+    if (currentIndex < storiesList.length - 1) {
+      setCurrentIndex(c => c + 1);
+    } else {
+      onClose();
+    }
+  };
+
+  const handlePrev = (e) => {
+    if (e) e.stopPropagation();
+    if (currentIndex > 0) {
+      setCurrentIndex(c => c - 1);
+    }
+  };
+
+  // Keyboard controls: Space (Pause), ArrowLeft (Prev), ArrowRight (Next), Escape (Close)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        setIsPaused((prev) => !prev);
+      } else if (e.code === 'ArrowRight') {
+        handleNext();
+      } else if (e.code === 'ArrowLeft') {
+        handlePrev();
+      } else if (e.code === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentIndex, onClose]);
+
+  if (!currentStory) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950/90 backdrop-blur-md p-4 animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#17151A]/85 backdrop-blur-xl p-4 animate-fade-in">
+      {/* Ambient Blurred Background for Depth */}
+      {currentStory.mediaUrl && (
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-25 filter blur-3xl scale-110 pointer-events-none"
+          style={{ backgroundImage: `url(${currentStory.mediaUrl})` }}
+        />
+      )}
+
+      {/* Close Button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 text-white hover:text-rose-400 p-2 rounded-full bg-white/10 backdrop-blur-xs transition-colors"
+        className="absolute top-5 right-5 z-50 text-white hover:text-[#E55B86] p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all hover:scale-110 shadow-lg border border-white/20"
+        aria-label="Fechar Story"
       >
-        <X size={24} />
+        <X size={22} />
       </button>
 
-      <div className="relative w-full max-w-sm h-[600px] bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-zinc-800">
-        {/* Progress Bar */}
-        <div className="absolute top-3 left-3 right-3 z-10 flex gap-1">
-          <div className="h-1 bg-white/30 rounded-full flex-1 overflow-hidden">
-            <div
-              className="h-full bg-rose-500 transition-all duration-100 ease-linear"
-              style={{ width: `${progress}%` }}
-            />
+      {/* Prev Story Arrow Button */}
+      {currentIndex > 0 && (
+        <button
+          onClick={handlePrev}
+          className="hidden sm:flex absolute left-6 z-50 text-white hover:text-[#E55B86] p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all hover:scale-110 shadow-lg border border-white/20"
+          aria-label="Story Anterior"
+        >
+          <ChevronLeft size={28} />
+        </button>
+      )}
+
+      {/* Next Story Arrow Button */}
+      {currentIndex < storiesList.length - 1 && (
+        <button
+          onClick={handleNext}
+          className="hidden sm:flex absolute right-6 z-50 text-white hover:text-[#E55B86] p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all hover:scale-110 shadow-lg border border-white/20"
+          aria-label="Próximo Story"
+        >
+          <ChevronRight size={28} />
+        </button>
+      )}
+
+      {/* Main Story Card Player Container */}
+      <div
+        className="relative w-full max-w-sm h-[640px] max-h-[90vh] bg-[#17151A] rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-[#EADED5]/30 select-none group z-10"
+        onMouseDown={() => setIsPaused(true)}
+        onMouseUp={() => setIsPaused(false)}
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setIsPaused(false)}
+      >
+        {/* Story Progress Indicators Header */}
+        <div className="absolute top-3 left-3 right-3 z-30 flex gap-1.5 items-center">
+          {storiesList.map((st, idx) => {
+            let itemProgress = 0;
+            if (idx < currentIndex) itemProgress = 100;
+            else if (idx === currentIndex) itemProgress = progress;
+
+            return (
+              <div key={st.id} className="h-1.5 bg-white/30 rounded-full flex-1 overflow-hidden backdrop-blur-xs">
+                <div
+                  className="h-full bg-[#E55B86] transition-all duration-100 ease-linear shadow-xs"
+                  style={{ width: `${itemProgress}%` }}
+                />
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Story Author Header */}
+        <div className="absolute top-7 left-4 right-4 z-30 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Avatar src={currentStory.avatar} alt={currentStory.authorName} size="sm" className="border-2 border-[#E55B86]" />
+            <div className="text-white drop-shadow-md">
+              <p className="text-xs font-black leading-none">{currentStory.authorName}</p>
+              <p className="text-[10px] font-semibold text-white/80 mt-0.5">{currentStory.createdAt}</p>
+            </div>
+          </div>
+
+          {/* Pause / Play Manual Toggle Button */}
+          <div className="flex items-center gap-2">
+            {isPaused && (
+              <span className="bg-[#E55B86] text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-md animate-pulse">
+                Pausado
+              </span>
+            )}
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPaused(!isPaused);
+              }}
+              className="p-2 text-white bg-black/40 hover:bg-[#E55B86] backdrop-blur-md rounded-full transition-colors border border-white/20"
+              title={isPaused ? "Continuar Story (Espaço)" : "Pausar Story (Espaço)"}
+              aria-label={isPaused ? "Continuar" : "Pausar"}
+            >
+              {isPaused ? <Play size={16} className="translate-x-0.5" /> : <Pause size={16} />}
+            </button>
           </div>
         </div>
 
-        {/* Story Header */}
-        <div className="absolute top-6 left-4 right-4 z-10 flex items-center gap-3">
-          <Avatar src={story.avatar} alt={story.authorName} size="sm" />
-          <div className="text-white drop-shadow-md">
-            <p className="text-xs font-bold">{story.authorName}</p>
-            <p className="text-[10px] text-zinc-300">{story.createdAt}</p>
-          </div>
-        </div>
+        {/* Touch tap left/right overlay areas */}
+        <div
+          onClick={handlePrev}
+          className="absolute left-0 top-16 bottom-20 w-1/3 z-20 cursor-pointer"
+        />
+        <div
+          onClick={handleNext}
+          className="absolute right-0 top-16 bottom-20 w-1/3 z-20 cursor-pointer"
+        />
 
-        {/* Story Media */}
+        {/* Story Media Image */}
         <img
-          src={story.mediaUrl}
-          alt={story.caption || 'Story'}
+          src={currentStory.mediaUrl}
+          alt={currentStory.caption || 'Story'}
           className="w-full h-full object-cover"
         />
 
-        {/* Caption */}
-        {story.caption && (
-          <div className="absolute bottom-6 left-4 right-4 z-10 bg-zinc-900/80 backdrop-blur-md p-3 rounded-2xl border border-white/10 text-white text-xs text-center font-medium">
-            {story.caption}
+        {/* Caption Overlay */}
+        {currentStory.caption && (
+          <div className="absolute bottom-6 left-4 right-4 z-30 bg-[#17151A]/85 backdrop-blur-md p-3.5 rounded-2xl border border-[#EADED5]/30 text-white text-xs text-center font-medium leading-relaxed shadow-lg">
+            {currentStory.caption}
           </div>
         )}
       </div>

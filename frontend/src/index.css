@@ -3,23 +3,72 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --color-linhaviva: #E55B86;
+    --color-rosablush: #FEF1F4;
+    --color-rosaclaro: #EF9FB1;
+    --color-marfim: #FBF7EF;
+    --color-pessego: #F1DFD8;
+    --color-papelrosado: #EADED5;
+    --color-pretolinha: #17151A;
+    --color-marromrosado: #896B70;
+  }
+
   body {
-    @apply bg-[#FFF0F5] text-zinc-900 font-sans antialiased min-h-screen flex flex-col;
+    @apply bg-[#FBF7EF] text-[#17151A] font-sans antialiased min-h-screen flex flex-col selection:bg-[#FEF1F4] selection:text-[#E55B86];
   }
 }
 
-/* Scrollbar estilizada */
+/* Custom Craft Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #fff0f5;
+  background: #FBF7EF;
 }
 ::-webkit-scrollbar-thumb {
-  background: #f475a8;
+  background: #EF9FB1;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #e8608c;
+  background: #E55B86;
 }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.85; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+.glass-header {
+  background: rgba(251, 247, 239, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+.glass-nav {
+  background: rgba(254, 241, 244, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Safe area support for mobile devices */
+.pb-safe {
+  padding-bottom: max(5rem, env(safe-area-inset-bottom));
+}
+
+
+

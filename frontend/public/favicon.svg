@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="48" fill="#e8608c" />
-  <text x="50" y="65" font-size="50" text-anchor="middle" fill="#ffffff">🧶</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
+  <circle cx="20" cy="20" r="18" fill="#FEF1F4" stroke="#EADED5" stroke-width="1.5" />
+  <path d="M 10,20 C 10,12 28,10 30,20 C 32,30 12,28 10,20 Z" fill="none" stroke="#E55B86" stroke-width="2.5" stroke-linecap="round" />
+  <path d="M 12,15 C 16,8 30,14 28,24 C 26,34 10,24 12,15 Z" fill="none" stroke="#E55B86" stroke-width="2.5" stroke-linecap="round" />
+  <path d="M 15,28 C 22,34 32,22 25,12 C 18,2 10,18 15,28 Z" fill="none" stroke="#EF9FB1" stroke-width="2" stroke-linecap="round" />
+  <path d="M 7,33 L 33,7" stroke="#17151A" stroke-width="2.2" stroke-linecap="round" />
+  <path d="M 33,7 C 34.5,5.5 36,6.5 35,8" stroke="#17151A" stroke-width="2.2" stroke-linecap="round" fill="none" />
+  <circle cx="27" cy="13" r="2.5" fill="#E55B86" />
 </svg>
