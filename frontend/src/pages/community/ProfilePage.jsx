@@ -26,7 +26,11 @@ import {
   Sparkles,
   Star,
   Clock,
-  PlayCircle
+  PlayCircle,
+  Camera,
+  Upload,
+  X,
+  Image as ImageIcon
 } from 'lucide-react';
 
 export const ProfilePage = () => {
@@ -47,6 +51,20 @@ export const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState('posts'); // 'posts' | 'videoaulas' | 'saved'
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
 
+  // Cover photo state
+  const PRESET_COVERS = [
+    'https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=1200&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1615233500042-19e0bed80b87?w=1200&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1544816155-12df9643f363?w=1200&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1606744824163-985d376605aa?w=1200&auto=format&fit=crop&q=80',
+  ];
+
+  const [coverImage, setCoverImage] = useState(
+    profileUser.coverImage || PRESET_COVERS[0]
+  );
+  const [isChangeCoverOpen, setIsChangeCoverOpen] = useState(false);
+  const [customCoverUrl, setCustomCoverUrl] = useState('');
+
   // Filter posts by user
   const userPosts = MOCK_POSTS.filter(
     (p) => p.author.username === profileUser.username || (isOwnProfile && currentUser.role === 'creator')
@@ -62,30 +80,75 @@ export const ProfilePage = () => {
     navigate(`/chat?conv=${convId}`);
   };
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setCoverImage(event.target.result);
+          setIsChangeCoverOpen(false);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleApplyCustomUrl = (e) => {
+    e.preventDefault();
+    if (customCoverUrl.trim()) {
+      setCoverImage(customCoverUrl.trim());
+      setCustomCoverUrl('');
+      setIsChangeCoverOpen(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto space-y-6 relative animate-fade-in">
       
       {/* Instagram-style Creator Profile Header Card */}
       <Card className="overflow-hidden border border-[#EADED5] shadow-craft bg-white rounded-3xl">
-        {/* Soft Rosê Cover Banner */}
-        <div className="h-36 sm:h-44 bg-gradient-to-r from-[#E55B86] via-[#EF9FB1] to-[#E55B86] relative overflow-hidden shadow-inner">
-          <div className="absolute inset-0 bg-[radial-[#ffffff]_1px,transparent_1px] [background-size:16px_16px] opacity-20" />
-          <div className="absolute right-4 top-4 bg-[#FEF1F4]/90 backdrop-blur-md text-[#E55B86] font-black text-[10px] uppercase tracking-widest px-3.5 py-1 rounded-full shadow-sm border border-[#EF9FB1]/50">
+        {/* Soft Rosê Cover Banner with Image Support */}
+        <div className="h-40 sm:h-52 bg-gradient-to-r from-[#E55B86] via-[#EF9FB1] to-[#E55B86] relative overflow-hidden shadow-inner group">
+          {coverImage && (
+            <img
+              src={coverImage}
+              alt="Foto do painel de fundo"
+              className="w-full h-full object-cover transition-opacity duration-300"
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+          <div className="absolute inset-0 bg-[radial-[#ffffff]_1px,transparent_1px] [background-size:16px_16px] opacity-15" />
+
+          <div className="absolute left-4 top-4 bg-[#FEF1F4]/90 backdrop-blur-md text-[#E55B86] font-black text-[10px] uppercase tracking-widest px-3.5 py-1 rounded-full shadow-sm border border-[#EF9FB1]/50 flex items-center gap-1.5">
+            <Sparkles size={12} />
             Comunidade Fio a Fio 🧶
           </div>
+
+          {/* Trocar Capa Button */}
+          {isOwnProfile && (
+            <button
+              onClick={() => setIsChangeCoverOpen(true)}
+              className="absolute right-4 top-4 bg-white/90 hover:bg-white text-[#17151A] hover:text-[#E55B86] backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-extrabold shadow-md transition-all flex items-center gap-1.5 border border-white/60 active:scale-95 cursor-pointer"
+              title="Trocar Foto do Painel de Fundo"
+            >
+              <Camera size={15} className="text-[#E55B86]" />
+              <span>Trocar Capa</span>
+            </button>
+          )}
         </div>
 
         <CardBody className="relative pt-0 px-4 sm:px-8 pb-6 space-y-6">
           {/* Avatar and Top Actions Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-16 sm:-mt-20">
-            {/* Story Ring Avatar */}
+            {/* Story Ring Avatar - Occupies full circle */}
             <div className="relative inline-block self-center sm:self-auto">
-              <div className="p-1 rounded-full bg-gradient-to-tr from-[#E55B86] via-[#EF9FB1] to-[#E55B86] shadow-xl">
+              <div className="p-1 rounded-full bg-gradient-to-tr from-[#E55B86] via-[#EF9FB1] to-[#E55B86] shadow-xl w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center">
                 <Avatar
                   src={profileUser.avatar}
                   alt={profileUser.name}
                   size="xl"
-                  className="border-4 border-white shadow-md w-28 h-28 sm:w-32 sm:h-32 object-cover"
+                  className="w-full h-full border-4 border-white shadow-md rounded-full object-cover"
                 />
               </div>
               {profileUser.verifiedCreator && (
@@ -352,6 +415,87 @@ export const ProfilePage = () => {
         isOpen={isCreatePostOpen}
         onClose={() => setIsCreatePostOpen(false)}
       />
+
+      {/* Change Cover Modal */}
+      {isChangeCoverOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl border border-[#EADED5] relative">
+            <button
+              onClick={() => setIsChangeCoverOpen(false)}
+              className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-zinc-600 rounded-full hover:bg-zinc-100 transition-colors"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-[#E55B86]">
+                <Camera size={20} />
+                <h3 className="text-lg font-black text-[#17151A]">Alterar Painel de Fundo</h3>
+              </div>
+              <p className="text-xs text-[#896B70] font-medium">
+                Escolha uma foto de capa pré-definida de crochê, envie uma imagem do seu computador ou cole o link de uma imagem.
+              </p>
+            </div>
+
+            {/* Preset Cover Options */}
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-wider text-[#17151A] block">
+                Capas Ilustrativas Pré-definidas
+              </label>
+              <div className="grid grid-cols-2 gap-2.5">
+                {PRESET_COVERS.map((preset, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setCoverImage(preset);
+                      setIsChangeCoverOpen(false);
+                    }}
+                    className={`relative h-20 rounded-xl overflow-hidden border-2 transition-all ${
+                      coverImage === preset ? 'border-[#E55B86] ring-2 ring-[#E55B86]/40 scale-[1.02]' : 'border-transparent hover:border-[#EF9FB1]'
+                    }`}
+                  >
+                    <img src={preset} alt={`Opção ${index + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Custom URL or Local File Upload */}
+            <div className="space-y-3 pt-2 border-t border-[#EADED5]">
+              <label className="text-xs font-black uppercase tracking-wider text-[#17151A] block">
+                Carregar do Computador ou Usar Link URL
+              </label>
+
+              <div className="flex items-center gap-2">
+                <label className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#FEF1F4] hover:bg-[#F1DFD8] text-[#E55B86] rounded-xl text-xs font-black border border-[#EF9FB1]/60 cursor-pointer transition-colors">
+                  <Upload size={16} />
+                  <span>Enviar Imagem Local</span>
+                  <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
+                </label>
+              </div>
+
+              <form onSubmit={handleApplyCustomUrl} className="flex gap-2">
+                <input
+                  type="url"
+                  placeholder="Cole o link da imagem (URL)..."
+                  value={customCoverUrl}
+                  onChange={(e) => setCustomCoverUrl(e.target.value)}
+                  className="flex-1 px-3.5 py-2 rounded-xl text-xs bg-[#FBF7EF] border border-[#EADED5] outline-none focus:border-[#E55B86] text-[#17151A]"
+                />
+                <Button type="submit" variant="primary" size="sm" className="bg-[#E55B86] text-white font-extrabold text-xs rounded-xl">
+                  Aplicar URL
+                </Button>
+              </form>
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <Button variant="ghost" size="sm" onClick={() => setIsChangeCoverOpen(false)} className="rounded-xl text-xs font-bold">
+                Fechar
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

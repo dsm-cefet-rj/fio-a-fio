@@ -90,10 +90,14 @@ export const BottomNavbar = () => {
               }`}
             >
               {item.isAvatar && currentUser?.avatar ? (
-                <div className={`p-0.5 rounded-full border-2 transition-all ${
-                  isActive ? 'border-[#E55B86] shadow-2xs' : 'border-transparent group-hover:border-[#EF9FB1]'
-                }`}>
-                  <Avatar src={currentUser.avatar} alt={currentUser.name} size="xs" />
+                <div className="w-7 h-7 flex items-center justify-center shrink-0">
+                  <div className={`rounded-full p-[1.5px] transition-all duration-200 ${
+                    isActive
+                      ? 'ring-2 ring-[#E55B86] ring-offset-1 ring-offset-[#FBF7EF]'
+                      : 'ring-1 ring-transparent group-hover:ring-[#EF9FB1]'
+                  }`}>
+                    <Avatar src={currentUser.avatar} alt={currentUser.name} size="xs" className="w-5 h-5 object-cover rounded-full" />
+                  </div>
                 </div>
               ) : (
                 <div className="relative">
