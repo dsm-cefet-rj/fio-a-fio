@@ -10,7 +10,8 @@ import {
   Search,
   BookOpen,
   Video,
-  Home
+  Home,
+  Sparkles
 } from 'lucide-react';
 
 export const Navbar = () => {
@@ -22,22 +23,33 @@ export const Navbar = () => {
     <header className="sticky top-0 z-40 w-full glass-header border-b border-[#EADED5] shadow-2xs transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
-          {/* Brand Logo */}
-          <Link to={currentRole === 'guest' ? '/' : '/feed'}>
+          {/* Brand Logo - Always links to Initial Page ('/') */}
+          <Link to="/" title="Ir para a Página Inicial">
             <Logo size="md" />
           </Link>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-1.5 bg-[#FEF1F4]/80 p-1.5 rounded-full border border-[#EADED5]">
             <Link
-              to={currentRole === 'guest' ? '/' : '/feed'}
+              to="/"
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                location.pathname === '/feed' || location.pathname === '/'
+                location.pathname === '/'
                   ? 'bg-[#E55B86] text-white shadow-xs'
                   : 'text-[#17151A] hover:text-[#E55B86] hover:bg-white/60'
               }`}
             >
               <Home size={15} />
+              <span>Início</span>
+            </Link>
+            <Link
+              to="/feed"
+              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                location.pathname === '/feed'
+                  ? 'bg-[#E55B86] text-white shadow-xs'
+                  : 'text-[#17151A] hover:text-[#E55B86] hover:bg-white/60'
+              }`}
+            >
+              <Sparkles size={15} />
               <span>Feed</span>
             </Link>
             <Link
@@ -77,6 +89,18 @@ export const Navbar = () => {
 
           {/* Right Header Actions */}
           <div className="flex items-center gap-2">
+            {/* Top Right Site Icon Button linking to Initial Page */}
+            <Link
+              to="/"
+              className={`p-2.5 text-[#17151A] hover:text-[#E55B86] hover:bg-[#FEF1F4] rounded-full transition-all duration-200 ${
+                location.pathname === '/' ? 'text-[#E55B86] bg-[#FEF1F4]' : ''
+              }`}
+              title="Página Inicial (O que você encontra no Fio a Fio)"
+              aria-label="Página Inicial"
+            >
+              <Home size={20} />
+            </Link>
+
             {/* Quick Chat Shortcut Icon */}
             <Link
               to="/chat"

@@ -1,31 +1,50 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { useRole } from '../../context/RoleContext';
 import { Card, CardHeader, CardBody } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
-import { ArrowLeft, User, MapPin, Camera } from 'lucide-react';
+import { ArrowLeft, User, MapPin, Camera, Sparkles, CheckCircle2, Video, UserCheck } from 'lucide-react';
 
 export const EditProfilePage = () => {
   const navigate = useNavigate();
-  const { currentUser } = useRole();
+  const [searchParams] = useSearchParams();
+  const { currentUser, currentRole, switchRole } = useRole();
+
   const [name, setName] = useState(currentUser.name || '');
   const [bio, setBio] = useState(currentUser.bio || '');
   const [location, setLocation] = useState(currentUser.location || '');
   const [avatarUrl, setAvatarUrl] = useState(currentUser.avatar || '');
+  const [selectedRole, setSelectedRole] = useState(currentRole === 'guest' ? 'user' : currentRole);
   const [message, setMessage] = useState('');
+
+  const isFocusRole = searchParams.get('focus') === 'role';
+
+  useEffect(() => {
+    if (isFocusRole) {
+      // Default auto selection to creator when navigating from 'Ensine & Monetize'
+      setSelectedRole('creator');
+    }
+  }, [isFocusRole]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setMessage('Perfil atualizado com sucesso!');
+    if (selectedRole !== currentRole) {
+      switchRole(selectedRole);
+    }
+    setMessage('Perfil e tipo de conta atualizados com sucesso!');
     setTimeout(() => {
-      navigate('/perfil');
+      if (selectedRole === 'creator') {
+        navigate('/criador/videoaulas');
+      } else {
+        navigate('/perfil');
+      }
     }, 800);
   };
 
   return (
     <div className="max-w-xl mx-auto space-y-4">
-      <Link to="/perfil" className="inline-flex items-center gap-1 text-xs font-bold text-rose-600 hover:text-rose-700">
+      <Link to="/perfil" className="inline-flex items-center gap-1 text-xs font-bold text-[#E55B86] hover:underline">
         <ArrowLeft size={16} />
         Voltar para o Perfil
       </Link>
@@ -33,17 +52,85 @@ export const EditProfilePage = () => {
       <Card>
         <CardHeader>
           <h1 className="text-lg font-extrabold text-zinc-900">Editar Perfil</h1>
-          <p className="text-xs text-zinc-500">Atualize suas informações pessoais e biografia.</p>
+          <p className="text-xs text-zinc-500">Atualize suas informações pessoais e tipo de perfil.</p>
         </CardHeader>
 
         <CardBody className="space-y-4">
           {message && (
-            <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold rounded-xl text-center">
+            <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold rounded-xl text-center shadow-xs">
               {message}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Profile Type Selection Box (Tipo de Perfil) */}
+            <div
+              className={`p-4 rounded-2xl border transition-all duration-300 ${
+                isFocusRole
+                  ? 'bg-[#FEF1F4] border-[#E55B86] ring-2 ring-[#E55B86]/40 shadow-md'
+                  : 'bg-[#FEF1F4]/60 border-[#EADED5]'
+              }`}
+            >
+              <div className="flex items-center gap-2 mb-1.5">
+                <Sparkles className="text-[#E55B86]" size={18} />
+                <label className="text-xs font-extrabold uppercase tracking-wider text-[#17151A]">
+                  Tipo de Perfil
+                </label>
+                {isFocusRole && (
+                  <span className="ml-auto bg-[#E55B86] text-white text-[10px] font-black px-2 py-0.5 rounded-full uppercase">
+                    Altere aqui
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-[#896B70] mb-3 leading-relaxed">
+                Escolha seu perfil na plataforma. Como Criadora/Professora você poderá publicar e rentabilizar suas vídeo-aulas de crochê!
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSelectedRole('user')}
+                  className={`p-3.5 rounded-xl border text-left transition-all ${
+                    selectedRole === 'user'
+                      ? 'bg-white border-[#E55B86] text-[#E55B86] shadow-sm ring-1 ring-[#E55B86]'
+                      : 'bg-white/80 border-[#EADED5] text-[#896B70] hover:bg-white'
+                  }`}
+                >
+                  <div className="flex items-center justify-between font-extrabold text-xs mb-1 text-[#17151A]">
+                    <span className="flex items-center gap-1.5">
+                      <UserCheck size={15} className="text-[#E55B86]" />
+                      Aluna / Crocheteira
+                    </span>
+                    {selectedRole === 'user' && <CheckCircle2 size={16} className="text-[#E55B86] fill-[#FEF1F4]" />}
+                  </div>
+                  <p className="text-[11px] text-[#896B70] font-medium leading-normal">
+                    Aprenda, participe da comunidade e salve materiais.
+                  </p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedRole('creator')}
+                  className={`p-3.5 rounded-xl border text-left transition-all ${
+                    selectedRole === 'creator'
+                      ? 'bg-white border-[#E55B86] text-[#E55B86] shadow-sm ring-1 ring-[#E55B86]'
+                      : 'bg-white/80 border-[#EADED5] text-[#896B70] hover:bg-white'
+                  }`}
+                >
+                  <div className="flex items-center justify-between font-extrabold text-xs mb-1 text-[#17151A]">
+                    <span className="flex items-center gap-1.5">
+                      <Video size={15} className="text-[#E55B86]" />
+                      Criadora / Professora
+                    </span>
+                    {selectedRole === 'creator' && <CheckCircle2 size={16} className="text-[#E55B86] fill-[#FEF1F4]" />}
+                  </div>
+                  <p className="text-[11px] text-[#896B70] font-medium leading-normal">
+                    Crie, publique e venda suas vídeo-aulas com 85% de comissão.
+                  </p>
+                </button>
+              </div>
+            </div>
+
             <Input
               label="Nome de Exibição"
               icon={User}
@@ -60,7 +147,7 @@ export const EditProfilePage = () => {
                 rows={3}
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
-                className="w-full bg-white border border-zinc-200 rounded-xl p-3 text-sm text-zinc-800 outline-none focus:border-rose-400"
+                className="w-full bg-white border border-zinc-200 rounded-xl p-3 text-sm text-zinc-800 outline-none focus:border-[#E55B86]"
               />
             </div>
 
@@ -78,7 +165,7 @@ export const EditProfilePage = () => {
               onChange={(e) => setAvatarUrl(e.target.value)}
             />
 
-            <Button type="submit" variant="primary" fullWidth size="lg">
+            <Button type="submit" variant="primary" fullWidth size="lg" className="bg-[#E55B86] hover:bg-[#D24471] text-white font-black">
               Salvar Alterações
             </Button>
           </form>
@@ -87,3 +174,4 @@ export const EditProfilePage = () => {
     </div>
   );
 };
+
