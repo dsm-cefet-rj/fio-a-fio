@@ -35,6 +35,15 @@ export const ChatPage = () => {
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef(null);
 
+  // Disable body scroll when ChatPage is active to prevent outer page scrollbar
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
   // Check query param (e.g., /chat?userId=usr-2 or /chat?user=mariabordadeira)
   useEffect(() => {
     const targetUserId = searchParams.get('userId') || searchParams.get('user');
@@ -86,42 +95,42 @@ export const ChatPage = () => {
   const activeOtherUser = activeConversation ? getOtherParticipant(activeConversation) : null;
 
   return (
-    <div className="max-w-6xl mx-auto h-[calc(85vh-4rem)] min-h-[550px] max-h-[800px] flex flex-col animate-fade-in">
-      <Card className="flex-1 flex overflow-hidden border border-rose-100 shadow-xl shadow-rose-900/5 rounded-3xl bg-white">
+    <div className="fixed inset-x-0 top-14 sm:top-16 bottom-16 sm:bottom-20 z-30 flex items-center justify-center p-3 sm:p-6 bg-[#FBF7EF]">
+      <Card className="w-full max-w-5xl h-full flex overflow-hidden border border-[#EADED5] shadow-2xl rounded-3xl bg-white">
         
-        {/* Left Column: Conversations List */}
-        <div className={`w-full md:w-80 lg:w-96 flex flex-col border-r border-rose-100/80 bg-rose-50/30 ${
+        {/* Left Column: Conversations List with Internal Scrollbar */}
+        <div className={`w-full md:w-80 lg:w-96 flex flex-col border-r border-[#EADED5] bg-[#FEF1F4]/40 shrink-0 ${
           activeConversationId ? 'hidden md:flex' : 'flex'
         }`}>
           {/* List Header */}
-          <div className="p-4 border-b border-rose-100/80 bg-white/80 backdrop-blur-md">
+          <div className="p-4 border-b border-[#EADED5] bg-white/95 backdrop-blur-md shrink-0">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold">
+                <div className="w-8 h-8 rounded-xl bg-[#FEF1F4] text-[#E55B86] flex items-center justify-center font-bold">
                   💬
                 </div>
-                <h1 className="font-extrabold text-lg text-zinc-900">Mensagens</h1>
+                <h1 className="font-extrabold text-lg text-[#17151A]">Mensagens</h1>
               </div>
             </div>
 
             {/* Search Box */}
             <div className="relative">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-rose-400" />
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#E55B86]" />
               <input
                 type="text"
-                placeholder="Buscar conversa ou crocheteira..."
+                placeholder="Buscar conversa..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-white text-xs rounded-full border border-rose-200/80 text-zinc-800 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-rose-400/50 shadow-2xs transition-all"
+                className="w-full pl-9 pr-4 py-2 bg-white text-xs rounded-full border border-[#EADED5] text-[#17151A] placeholder-[#896B70] focus:outline-none focus:ring-2 focus:ring-[#E55B86]/50 shadow-2xs transition-all"
               />
             </div>
           </div>
 
-          {/* Conversations Items */}
-          <div className="flex-1 overflow-y-auto divide-y divide-rose-50/60 p-2 space-y-1">
+          {/* Conversations Items: Dedicated Internal Scrollbar on Left */}
+          <div className="flex-1 overflow-y-auto p-2 space-y-1.5 divide-y divide-[#FEF1F4] max-h-full">
             {filteredConversations.length === 0 ? (
-              <div className="p-8 text-center text-zinc-400 space-y-2">
-                <MessageCircle size={32} className="mx-auto text-rose-300" />
+              <div className="p-8 text-center text-[#896B70] space-y-2">
+                <MessageCircle size={32} className="mx-auto text-[#EF9FB1]" />
                 <p className="text-xs font-semibold">Nenhuma conversa encontrada</p>
               </div>
             ) : (
@@ -136,8 +145,8 @@ export const ChatPage = () => {
                     onClick={() => setActiveConversationId(conv.id)}
                     className={`w-full flex items-center gap-3 p-3 rounded-2xl transition-all duration-200 text-left ${
                       isSelected
-                        ? 'bg-rose-500 text-white shadow-md shadow-rose-500/20 scale-[1.01]'
-                        : 'hover:bg-rose-100/60 bg-white/40 text-zinc-800'
+                        ? 'bg-[#E55B86] text-white shadow-md shadow-[#E55B86]/20 scale-[1.01]'
+                        : 'hover:bg-[#FEF1F4] bg-white/60 text-[#17151A]'
                     }`}
                   >
                     <div className="relative shrink-0">
@@ -147,11 +156,11 @@ export const ChatPage = () => {
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <span className={`text-xs font-extrabold truncate ${isSelected ? 'text-white' : 'text-zinc-900'}`}>
+                        <span className={`text-xs font-extrabold truncate ${isSelected ? 'text-white' : 'text-[#17151A]'}`}>
                           {other.name}
                         </span>
                         {conv.lastMessage && (
-                          <span className={`text-[10px] font-medium ${isSelected ? 'text-rose-100' : 'text-zinc-400'}`}>
+                          <span className={`text-[10px] font-medium ${isSelected ? 'text-[#FEF1F4]' : 'text-[#896B70]'}`}>
                             {conv.lastMessage.timestamp}
                           </span>
                         )}
@@ -159,12 +168,12 @@ export const ChatPage = () => {
 
                       <div className="flex items-center justify-between mt-0.5">
                         <p className={`text-[11px] truncate ${
-                          isSelected ? 'text-rose-100 font-medium' : unread ? 'font-bold text-zinc-900' : 'text-zinc-500'
+                          isSelected ? 'text-[#FEF1F4] font-medium' : unread ? 'font-bold text-[#17151A]' : 'text-[#896B70]'
                         }`}>
                           {conv.lastMessage?.text || 'Sem mensagens'}
                         </p>
                         {unread && !isSelected && (
-                          <span className="ml-1.5 shrink-0 bg-rose-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">
+                          <span className="ml-1.5 shrink-0 bg-[#E55B86] text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">
                             {conv.unreadCount}
                           </span>
                         )}
@@ -178,17 +187,17 @@ export const ChatPage = () => {
         </div>
 
         {/* Right Column: Chat Thread */}
-        <div className={`flex-1 flex flex-col bg-slate-50/40 ${
+        <div className={`flex-1 flex flex-col bg-[#FBF7EF]/30 ${
           !activeConversationId ? 'hidden md:flex' : 'flex'
         }`}>
           {activeConversation && activeOtherUser ? (
             <>
               {/* Thread Header */}
-              <div className="p-3.5 px-6 border-b border-rose-100 bg-white/90 backdrop-blur-md flex items-center justify-between shadow-2xs">
+              <div className="p-3.5 px-6 border-b border-[#EADED5] bg-white/95 backdrop-blur-md flex items-center justify-between shadow-2xs shrink-0">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setActiveConversationId(null)}
-                    className="md:hidden p-1.5 text-zinc-600 hover:text-rose-600 rounded-full hover:bg-rose-50"
+                    className="md:hidden p-1.5 text-[#17151A] hover:text-[#E55B86] rounded-full hover:bg-[#FEF1F4]"
                     aria-label="Voltar para conversas"
                   >
                     <ArrowLeft size={18} />
@@ -198,22 +207,22 @@ export const ChatPage = () => {
 
                   <div>
                     <div className="flex items-center gap-1.5">
-                      <h2 className="font-extrabold text-sm text-zinc-900">{activeOtherUser.name}</h2>
+                      <h2 className="font-extrabold text-sm text-[#17151A]">{activeOtherUser.name}</h2>
                       {activeOtherUser.role === 'creator' && (
-                        <span className="bg-purple-100 text-purple-700 text-[10px] font-extrabold px-2 py-0.5 rounded-full">
+                        <span className="bg-[#FEF1F4] text-[#E55B86] text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-[#EF9FB1]/50">
                           Professora 🧶
                         </span>
                       )}
                     </div>
-                    <p className="text-[11px] text-zinc-500">@{activeOtherUser.username} • On-line</p>
+                    <p className="text-[11px] text-[#896B70]">@{activeOtherUser.username} • On-line</p>
                   </div>
                 </div>
 
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => navigate(`/perfil`)}
-                  className="rounded-full text-xs font-bold border-rose-200 text-rose-700 hover:bg-rose-50"
+                  onClick={() => navigate(`/perfil?user=${activeOtherUser.username}`)}
+                  className="rounded-full text-xs font-bold border-[#EADED5] text-[#17151A] hover:bg-[#FEF1F4] hover:text-[#E55B86]"
                 >
                   <User size={14} />
                   <span className="hidden sm:inline">Ver Perfil</span>
@@ -223,7 +232,7 @@ export const ChatPage = () => {
               {/* Messages Container */}
               <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3 bg-[#FFF9FB]">
                 <div className="text-center my-2">
-                  <span className="bg-rose-100/70 text-rose-800 text-[10px] font-bold px-3 py-1 rounded-full border border-rose-200/60 shadow-2xs">
+                  <span className="bg-[#FEF1F4] text-[#E55B86] text-[10px] font-bold px-3.5 py-1 rounded-full border border-[#EF9FB1]/60 shadow-2xs">
                     Conversa segura e privada no Fio a Fio 🧶
                   </span>
                 </div>
@@ -241,16 +250,16 @@ export const ChatPage = () => {
                       <div
                         className={`p-3.5 px-4 text-xs sm:text-sm leading-relaxed shadow-xs ${
                           isMe
-                            ? 'bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-2xl rounded-br-xs font-medium'
-                            : 'bg-white text-zinc-900 border border-rose-100/90 rounded-2xl rounded-bl-xs font-normal'
+                            ? 'bg-[#E55B86] text-white rounded-2xl rounded-br-xs font-medium shadow-sm'
+                            : 'bg-white text-[#17151A] border border-[#EADED5] rounded-2xl rounded-bl-xs font-normal'
                         }`}
                       >
                         {msg.text}
                       </div>
 
-                      <div className="flex items-center gap-1 mt-1 text-[10px] text-zinc-400 px-1">
+                      <div className="flex items-center gap-1 mt-1 text-[10px] text-[#896B70] px-1">
                         <span>{msg.timestamp}</span>
-                        {isMe && <CheckCheck size={12} className="text-rose-400" />}
+                        {isMe && <CheckCheck size={12} className="text-[#E55B86]" />}
                       </div>
                     </div>
                   );
@@ -259,18 +268,18 @@ export const ChatPage = () => {
               </div>
 
               {/* Input Form */}
-              <form onSubmit={handleSend} className="p-3 sm:p-4 bg-white border-t border-rose-100 flex items-center gap-2">
+              <form onSubmit={handleSend} className="p-3 sm:p-4 bg-white border-t border-[#EADED5] flex items-center gap-2 shrink-0">
                 <input
                   type="text"
                   placeholder="Escreva sua mensagem com carinho..."
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  className="flex-1 px-4 py-2.5 bg-rose-50/50 border border-rose-200/80 rounded-full text-xs sm:text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-rose-400/60 focus:bg-white transition-all"
+                  className="flex-1 px-4 py-2.5 bg-[#FEF1F4]/50 border border-[#EADED5] rounded-full text-xs sm:text-sm text-[#17151A] placeholder-[#896B70] focus:outline-none focus:ring-2 focus:ring-[#E55B86]/60 focus:bg-white transition-all"
                 />
                 <button
                   type="submit"
                   disabled={!inputText.trim()}
-                  className="w-10 h-10 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white flex items-center justify-center shadow-md shadow-rose-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95 shrink-0"
+                  className="w-10 h-10 rounded-full bg-[#E55B86] hover:bg-[#D24471] text-white flex items-center justify-center shadow-md shadow-[#E55B86]/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 active:scale-95 shrink-0"
                   aria-label="Enviar mensagem"
                 >
                   <Send size={18} className="translate-x-0.5" />
@@ -279,12 +288,12 @@ export const ChatPage = () => {
             </>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-[#FFF9FB] space-y-4">
-              <div className="w-16 h-16 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-2xl shadow-inner">
+              <div className="w-16 h-16 rounded-full bg-[#FEF1F4] text-[#E55B86] flex items-center justify-center text-2xl shadow-inner">
                 💬
               </div>
               <div className="max-w-xs space-y-1">
-                <h3 className="font-extrabold text-base text-zinc-900">Suas Conversas no Fio a Fio</h3>
-                <p className="text-xs text-zinc-500">
+                <h3 className="font-extrabold text-base text-[#17151A]">Suas Conversas no Fio a Fio</h3>
+                <p className="text-xs text-[#896B70]">
                   Selecione uma pessoa ao lado para conversar sobre receitas, fios e tirar dúvidas.
                 </p>
               </div>
