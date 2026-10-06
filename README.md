@@ -137,7 +137,31 @@ O JSON Server é uma API local de desenvolvimento. O sistema não implementa aut
 
 ## Histórico do repositório
 
-Histórico consultado em 06/10/2026 no repositório público [leticiamendsnt/fio-a-fio](https://github.com/leticiamendsnt/fio-a-fio). A branch padrão é `feature/frontend-ui-react`. As listas abaixo mostram os commits alcançáveis em cada branch nesse momento. Como há commits compartilhados entre branches, algumas mensagens se repetem.
+Histórico consultado em 06/10/2026 no repositório público [leticiamendsnt/fio-a-fio](https://github.com/leticiamendsnt/fio-a-fio). A branch padrão é `develop`. As listas abaixo mostram os commits alcançáveis em cada branch nesse momento. Como há commits compartilhados entre branches, algumas mensagens se repetem.
+
+### `develop` (branch principal do projeto)
+
+| Data | Commit | Mensagem |
+| --- | --- | --- |
+| 06/10/2026 | [`158bace`](https://github.com/leticiamendsnt/fio-a-fio/commit/158bace1556ad4d3f33bf305035c20ad01a35b61) | `feat: corrige abas, integra JSON Server e atualiza a documentação` |
+| 03/10/2026 | [`31c2a14`](https://github.com/leticiamendsnt/fio-a-fio/commit/31c2a14db389f680495adcc7c5684cb8cbc31446) | `Ajustes na tela do chat` |
+| 03/10/2026 | [`2d59a27`](https://github.com/leticiamendsnt/fio-a-fio/commit/2d59a278b51df115268fb620d95a3065383f45a2) | `Correção do design dealgumas possíbilidades da página do usuário` |
+| 03/10/2026 | [`46bfb80`](https://github.com/leticiamendsnt/fio-a-fio/commit/46bfb800c0e22d92eea932e1230cf16680739dcf) | `atualizacao da navegacao, landing page e transicao de perfil` |
+| 02/10/2026 | [`e2eeae8`](https://github.com/leticiamendsnt/fio-a-fio/commit/e2eeae899d6e963c9164143991944f28b7ad3f30) | `feat(ui/ux): refatoração visual, nova logo SVG e otimização da navegação` |
+| 27/09/2026 | [`53e3f74`](https://github.com/leticiamendsnt/fio-a-fio/commit/53e3f749c799a07618b0675609d2b52236990ea2) | `Alterações na barra de navegação, mudança das páginas de comentários e publicação para um modal, e acréscimo de um botão de 'Criar Publicação' no perfil do usuário` |
+| 22/09/2026 | [`bc7c17d`](https://github.com/leticiamendsnt/fio-a-fio/commit/bc7c17d3204bdbd25fd5bd9d9204f6ef0c114780) | `feat(frontend): setup inicial do app React com Vite, Tailwind CSS e 27 telas` |
+
+### `feat/implementacao-jsonserver`
+
+| Data | Commit | Mensagem |
+| --- | --- | --- |
+| 06/10/2026 | [`158bace`](https://github.com/leticiamendsnt/fio-a-fio/commit/158bace1556ad4d3f33bf305035c20ad01a35b61) | `feat: corrige abas, integra JSON Server e atualiza a documentação` |
+| 03/10/2026 | [`31c2a14`](https://github.com/leticiamendsnt/fio-a-fio/commit/31c2a14db389f680495adcc7c5684cb8cbc31446) | `Ajustes na tela do chat` |
+| 03/10/2026 | [`2d59a27`](https://github.com/leticiamendsnt/fio-a-fio/commit/2d59a278b51df115268fb620d95a3065383f45a2) | `Correção do design dealgumas possíbilidades da página do usuário` |
+| 03/10/2026 | [`46bfb80`](https://github.com/leticiamendsnt/fio-a-fio/commit/46bfb800c0e22d92eea932e1230cf16680739dcf) | `atualizacao da navegacao, landing page e transicao de perfil` |
+| 02/10/2026 | [`e2eeae8`](https://github.com/leticiamendsnt/fio-a-fio/commit/e2eeae899d6e963c9164143991944f28b7ad3f30) | `feat(ui/ux): refatoração visual, nova logo SVG e otimização da navegação` |
+| 27/09/2026 | [`53e3f74`](https://github.com/leticiamendsnt/fio-a-fio/commit/53e3f749c799a07618b0675609d2b52236990ea2) | `Alterações na barra de navegação, mudança das páginas de comentários e publicação para um modal, e acréscimo de um botão de 'Criar Publicação' no perfil do usuário` |
+| 22/09/2026 | [`bc7c17d`](https://github.com/leticiamendsnt/fio-a-fio/commit/bc7c17d3204bdbd25fd5bd9d9204f6ef0c114780) | `feat(frontend): setup inicial do app React com Vite, Tailwind CSS e 27 telas` |
 
 ### `docs/gpti-AV1`
 
