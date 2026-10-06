@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Plus } from 'lucide-react';
+import { useRole } from '../../context/RoleContext';
 import { CreatePostModal } from './CreatePostModal';
 
 export const FloatingCreatePostButton = () => {
+  const { currentRole } = useRole();
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Visitantes não criam publicações
+  if (currentRole === 'guest') {
+    return null;
+  }
 
   // Define routes where the floating button SHOULD be visible
   const allowedRoutes = ['/feed', '/pesquisa', '/perfil'];
@@ -39,12 +46,12 @@ export const FloatingCreatePostButton = () => {
   return (
     <>
       <div
-        className="fixed right-5 sm:right-8 z-40 animate-fade-in"
-        style={{ bottom: 'calc(4.75rem + env(safe-area-inset-bottom, 0px))' }}
+        className="fixed right-4 z-40 animate-fade-in sm:right-8"
+        style={{ bottom: 'calc(5.25rem + env(safe-area-inset-bottom, 0px))' }}
       >
         <button
           onClick={() => setIsModalOpen(true)}
-          className="group flex items-center gap-2.5 bg-[#E55B86] hover:bg-[#D24471] text-white font-extrabold py-3.5 px-5 sm:px-6 rounded-full shadow-lg shadow-[#E55B86]/30 hover:shadow-xl hover:shadow-[#E55B86]/40 hover:scale-105 active:scale-95 border border-white/30 backdrop-blur-md transition-all duration-300"
+          className="group flex min-h-12 items-center gap-2.5 rounded-full border border-white/40 bg-[#B94F70] px-4 py-3 font-extrabold text-white shadow-lg shadow-[#963B58]/20 transition-all duration-200 hover:bg-[#963B58] hover:shadow-xl active:scale-95 sm:px-5"
           aria-label="Criar nova publicação"
           title="Criar nova publicação"
         >

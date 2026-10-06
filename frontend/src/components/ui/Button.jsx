@@ -11,12 +11,12 @@ export const Button = ({
   type = 'button',
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-bold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]';
+  const baseStyles = 'inline-flex items-center justify-center font-bold rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B94F70] focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]';
 
   const variants = {
-    primary: 'bg-gradient-to-r from-rose-600 via-pink-600 to-rose-700 hover:from-rose-700 hover:to-pink-800 text-white shadow-md shadow-rose-600/25 hover:shadow-rose-600/40 hover:scale-[1.01]',
+    primary: 'bg-[#B94F70] hover:bg-[#963B58] text-white shadow-sm shadow-[#963B58]/15 hover:shadow-md',
     secondary: 'bg-rose-100/90 hover:bg-rose-200/90 text-rose-950 border border-rose-300/80 shadow-2xs',
-    outline: 'border-2 border-rose-500 text-rose-700 hover:bg-rose-50/80 bg-white font-bold',
+    outline: 'border border-[#B94F70] text-[#963B58] hover:bg-[#F6DDE5] bg-white font-bold',
     ghost: 'text-slate-700 hover:bg-rose-100/70 hover:text-rose-800',
     gold: 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-black shadow-md shadow-amber-500/25',
     danger: 'bg-red-600 hover:bg-red-700 text-white shadow-md shadow-red-500/20',
@@ -41,4 +41,3 @@ export const Button = ({
     </button>
   );
 };
-

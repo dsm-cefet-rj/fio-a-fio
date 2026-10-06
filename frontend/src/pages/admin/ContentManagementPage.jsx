@@ -1,6 +1,6 @@
 import React from 'react';
-import { MOCK_VIDEO_LESSONS } from '../../mocks/videoLessons';
-import { MOCK_MATERIALS } from '../../mocks/materials';
+import { getVideoLessons, getMaterials } from '../../services/api';
+import { useApiData } from '../../hooks/useApiData';
 import { Card, CardHeader, CardBody } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
@@ -8,6 +8,8 @@ import { Layers, Trash2, Eye } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const ContentManagementPage = () => {
+  const { data: videoLessons = [] } = useApiData('videoLessons', getVideoLessons);
+  const { data: materials = [] } = useApiData('materials', getMaterials);
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       <div className="space-y-1">
@@ -19,11 +21,11 @@ export const ContentManagementPage = () => {
       {/* Videos Management */}
       <Card>
         <CardHeader>
-          <h3 className="font-extrabold text-sm text-zinc-900">Vídeo-aulas no Sistema ({MOCK_VIDEO_LESSONS.length})</h3>
+          <h3 className="font-extrabold text-sm text-zinc-900">Vídeo-aulas no Sistema ({videoLessons.length})</h3>
         </CardHeader>
         <CardBody className="p-0">
           <div className="divide-y divide-rose-50">
-            {MOCK_VIDEO_LESSONS.map((v) => (
+            {videoLessons.map((v) => (
               <div key={v.id} className="p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <img src={v.thumbnail} alt={v.title} className="w-16 h-12 rounded-xl object-cover" />
@@ -51,11 +53,11 @@ export const ContentManagementPage = () => {
       {/* Free Materials Management */}
       <Card>
         <CardHeader>
-          <h3 className="font-extrabold text-sm text-zinc-900">Materiais Gratuitos ({MOCK_MATERIALS.length})</h3>
+          <h3 className="font-extrabold text-sm text-zinc-900">Materiais Gratuitos ({materials.length})</h3>
         </CardHeader>
         <CardBody className="p-0">
           <div className="divide-y divide-rose-50">
-            {MOCK_MATERIALS.map((m) => (
+            {materials.map((m) => (
               <div key={m.id} className="p-4 flex items-center justify-between">
                 <div>
                   <h4 className="font-bold text-xs text-zinc-900">{m.title}</h4>

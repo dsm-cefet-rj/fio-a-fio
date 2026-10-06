@@ -1,20 +1,38 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { MOCK_VIDEO_LESSONS } from '../../mocks/videoLessons';
+import { getVideoLessons } from '../../services/api';
+import { useApiData } from '../../hooks/useApiData';
+import { useRole } from '../../context/RoleContext';
 import { Card, CardBody } from '../../components/ui/Card';
 import { Avatar } from '../../components/ui/Avatar';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { StarRating } from '../../components/ui/StarRating';
-import { ArrowLeft, Clock, ShoppingCart, CheckCircle, PlayCircle, Award } from 'lucide-react';
+import { ArrowLeft, Clock, ShoppingCart, CheckCircle, PlayCircle, Award, Edit } from 'lucide-react';
 
 export const VideoDetailPage = () => {
   const { id } = useParams();
-  const lesson = MOCK_VIDEO_LESSONS.find((v) => v.id === id) || MOCK_VIDEO_LESSONS[0];
+  const { currentUser, currentRole } = useRole();
+  const { data: lessons = [] } = useApiData('videoLessons', getVideoLessons);
+  const lesson = lessons.find((v) => v.id === id) || lessons[0];
+
+  if (!lesson) return <p role="status" className="p-8 text-center text-sm">Carregando informações da aula…</p>;
+
+  const isOwner = currentUser?.id === lesson.creator?.id || currentUser?.id === lesson.creatorId;
+
+  if (lesson.isActive === false && !isOwner && currentRole !== 'admin') {
+    return (
+      <div className="mx-auto max-w-xl rounded-3xl border border-rose-100 bg-white p-6 text-center shadow-sm sm:p-10">
+        <h1 className="text-lg font-extrabold text-zinc-900">Esta vídeo-aula não está disponível</h1>
+        <p className="mt-2 text-sm text-zinc-600">O conteúdo foi desativado pela administração.</p>
+        <Link to="/videoaulas" className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-rose-700 px-5 text-sm font-bold text-white">Voltar ao catálogo</Link>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <Link to="/videoaulas" className="inline-flex items-center gap-1 text-xs font-bold text-rose-600 hover:text-rose-700">
+      <Link to="/videoaulas" className="inline-flex items-center gap-1 text-xs font-bold text-[#B94F70] hover:underline">
         <ArrowLeft size={16} />
         Voltar para o Catálogo de Vídeo-aulas
       </Link>
@@ -22,9 +40,9 @@ export const VideoDetailPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content Info */}
         <div className="lg:col-span-2 space-y-6">
-          <Card>
-            <div className="relative h-64 sm:h-80 overflow-hidden">
-              <img src={lesson.thumbnail} alt={lesson.title} className="w-full h-full object-cover" />
+          <Card className="border-[#E8CCD4]">
+            <div className="relative h-64 sm:h-80 overflow-hidden bg-zinc-950">
+              <img src={lesson.thumbnail} alt={lesson.title} className="w-full h-full object-cover opacity-90" />
               <div className="absolute inset-0 bg-zinc-950/30 flex items-center justify-center">
                 <PlayCircle size={64} className="text-white drop-shadow-lg opacity-90 hover:scale-110 transition-transform cursor-pointer" />
               </div>
@@ -36,45 +54,51 @@ export const VideoDetailPage = () => {
                   <Badge variant="rose" size="sm">{lesson.category}</Badge>
                   <Badge variant="gray" size="sm">{lesson.level}</Badge>
                 </div>
-                <h1 className="text-2xl font-extrabold text-zinc-900">{lesson.title}</h1>
-                <p className="text-sm text-zinc-600 font-medium">{lesson.subtitle}</p>
+                <h1 className="text-2xl font-extrabold text-[#251D20]">{lesson.title}</h1>
+                <p className="text-sm text-[#715B62] font-medium">{lesson.subtitle}</p>
               </div>
 
-              {/* Creator Info */}
-              <div className="flex items-center gap-3 p-3 bg-rose-50/50 rounded-2xl border border-rose-100">
-                <Avatar src={lesson.creator.avatar} alt={lesson.creator.name} size="md" />
+              {/* Creator Info vinculada dinamicamente ao usuário do db.json */}
+              <Link
+                to={`/perfil?user=${lesson.creator?.username || lesson.creator?.id || ''}`}
+                className="flex items-center gap-3 p-3 bg-[#F8E9ED] hover:bg-[#F6DDE5] rounded-2xl border border-[#E8CCD4] transition-colors"
+                title="Ver perfil da professora"
+              >
+                <Avatar src={lesson.creator?.avatar} alt={lesson.creator?.name || 'Professora'} size="md" />
                 <div>
-                  <p className="text-xs font-bold text-zinc-900">{lesson.creator.name}</p>
-                  <p className="text-[11px] text-zinc-500">Criadora & Professora de Crochê</p>
+                  <p className="text-xs font-bold text-[#251D20]">{lesson.creator?.name || 'Professora Fio a Fio'}</p>
+                  <p className="text-[11px] text-[#715B62]">
+                    @{lesson.creator?.username || 'professora'} • Criadora & Professora de Crochê
+                  </p>
                 </div>
-              </div>
+              </Link>
 
               {/* Rating & Specs */}
-              <div className="flex items-center gap-6 text-xs text-zinc-600 py-3 border-y border-rose-50">
+              <div className="flex items-center gap-6 text-xs text-[#715B62] py-3 border-y border-[#E8CCD4]/60">
                 <div className="flex items-center gap-1.5 font-bold">
                   <StarRating rating={lesson.rating} size={16} />
                   <span>{lesson.rating} ({lesson.reviewsCount} avaliações)</span>
                 </div>
                 <div className="flex items-center gap-1 font-semibold">
-                  <Clock size={16} className="text-rose-500" />
+                  <Clock size={16} className="text-[#B94F70]" />
                   <span>{lesson.duration}</span>
                 </div>
               </div>
 
               {/* Course Description */}
               <div className="space-y-2">
-                <h3 className="font-bold text-sm text-zinc-900 uppercase tracking-wider">Descrição Completa</h3>
-                <p className="text-sm text-zinc-700 leading-relaxed">{lesson.description}</p>
+                <h3 className="font-bold text-sm text-[#251D20] uppercase tracking-wider">Descrição Completa</h3>
+                <p className="text-sm text-[#715B62] leading-relaxed">{lesson.description}</p>
               </div>
 
               {/* What You Will Learn */}
-              {lesson.whatYouWillLearn && (
-                <div className="space-y-3 bg-white p-4 rounded-2xl border border-rose-100">
-                  <h3 className="font-bold text-sm text-zinc-900 uppercase tracking-wider flex items-center gap-2">
-                    <Award size={18} className="text-rose-500" />
+              {lesson.whatYouWillLearn && lesson.whatYouWillLearn.length > 0 && (
+                <div className="space-y-3 bg-white p-4 rounded-2xl border border-[#E8CCD4]">
+                  <h3 className="font-bold text-sm text-[#251D20] uppercase tracking-wider flex items-center gap-2">
+                    <Award size={18} className="text-[#B94F70]" />
                     O que você vai aprender
                   </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-zinc-700 font-medium">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#715B62] font-medium">
                     {lesson.whatYouWillLearn.map((item, idx) => (
                       <div key={idx} className="flex items-center gap-2">
                         <CheckCircle size={14} className="text-emerald-500 shrink-0" />
@@ -90,35 +114,44 @@ export const VideoDetailPage = () => {
 
         {/* Purchase Sticky Sidebar */}
         <div className="space-y-6">
-          <Card className="sticky top-20 border-rose-200 shadow-md">
+          <Card className="sticky top-20 border-[#E8CCD4] shadow-md">
             <CardBody className="p-6 space-y-4">
               <div className="text-center space-y-1">
                 <span className="text-xs uppercase font-bold text-zinc-400">Preço de Acesso Vitalício</span>
-                <div className="text-3xl font-black text-rose-600">
-                  R$ {lesson.price.toFixed(2).replace('.', ',')}
+                <div className="text-3xl font-black text-[#B94F70]">
+                  R$ {Number(lesson.price || 0).toFixed(2).replace('.', ',')}
                 </div>
-                <p className="text-[11px] text-zinc-500">Pagamento único • Acesso imediato no painel</p>
+                <p className="text-[11px] text-[#715B62]">Pagamento único • Acesso imediato no painel</p>
               </div>
 
-              <Link to={`/compra/${lesson.id}`} className="block">
-                <Button variant="primary" fullWidth size="lg" className="shadow-md">
-                  <ShoppingCart size={18} />
-                  Comprar Vídeo-aula
-                </Button>
-              </Link>
+              {isOwner ? (
+                <Link to={`/criador/videoaulas/editar/${lesson.id}`} className="block">
+                  <Button variant="secondary" fullWidth size="lg" className="shadow-md font-bold bg-[#F6DDE5] text-[#B94F70] hover:bg-[#E8CCD4]">
+                    <Edit size={16} />
+                    Editar esta Vídeo-aula
+                  </Button>
+                </Link>
+              ) : (
+                <Link to={currentRole === 'guest' ? `/login?redirect=/compra/${lesson.id}` : `/compra/${lesson.id}`} className="block">
+                  <Button variant="primary" fullWidth size="lg" className="shadow-md bg-[#B94F70] hover:bg-[#963B58] text-white">
+                    <ShoppingCart size={18} />
+                    Comprar Vídeo-aula
+                  </Button>
+                </Link>
+              )}
 
-              <div className="pt-4 border-t border-rose-50 space-y-2 text-xs text-zinc-600">
+              <div className="pt-4 border-t border-[#E8CCD4]/60 space-y-2 text-xs text-[#715B62]">
                 <p className="flex items-center gap-2 font-semibold">
-                  <CheckCircle size={14} className="text-rose-500" />
+                  <CheckCircle size={14} className="text-[#B94F70]" />
                   Assista no celular, tablet ou computador
                 </p>
                 <p className="flex items-center gap-2 font-semibold">
-                  <CheckCircle size={14} className="text-rose-500" />
+                  <CheckCircle size={14} className="text-[#B94F70]" />
                   Suporte a dúvidas com a professora
                 </p>
                 <p className="flex items-center gap-2 font-semibold">
-                  <CheckCircle size={14} className="text-rose-500" />
-                  Divisão transparente: 85% para o criador
+                  <CheckCircle size={14} className="text-[#B94F70]" />
+                  Divisão transparente: 85% para a criadora
                 </p>
               </div>
             </CardBody>

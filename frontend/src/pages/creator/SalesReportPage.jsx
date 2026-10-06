@@ -1,5 +1,7 @@
 import React from 'react';
-import { MOCK_SALES_SUMMARY } from '../../mocks/sales';
+import { getSalesReport } from '../../services/api';
+import { useApiData } from '../../hooks/useApiData';
+import { useRole } from '../../context/RoleContext';
 import { StatCard } from '../../components/ui/StatCard';
 import { DataTable } from '../../components/ui/DataTable';
 import { Card, CardBody } from '../../components/ui/Card';
@@ -7,6 +9,10 @@ import { Badge } from '../../components/ui/Badge';
 import { ShieldCheck } from 'lucide-react';
 
 export const SalesReportPage = () => {
+  const { currentUser } = useRole();
+  const { data: salesReport } = useApiData('salesReport', getSalesReport);
+  const report = salesReport || { creatorNetShare: 0, totalGrossSales: 0, platformShare: 0, totalStudents: 0, recentSales: [] };
+
   const columns = [
     { header: 'ID / Data' },
     { header: 'Curso' },
@@ -16,10 +22,16 @@ export const SalesReportPage = () => {
     { header: 'Status' },
   ];
 
+  const salesList = currentUser?.id
+    ? report.recentSales.filter(s => !s.creatorId || s.creatorId === currentUser.id)
+    : report.recentSales;
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       <div className="space-y-1">
-        <span className="text-xs uppercase font-extrabold tracking-wider text-purple-600">Área Financeira</span>
+        <span className="text-xs uppercase font-extrabold tracking-wider text-purple-600">
+          Área Financeira • {currentUser?.name || 'Professora'}
+        </span>
         <h1 className="text-2xl sm:text-3xl font-black text-zinc-900">Relatório de Vendas & Receita</h1>
         <p className="text-xs text-zinc-500">Acompanhe seus rendimentos e repasses da plataforma Fio a Fio.</p>
       </div>
@@ -29,26 +41,26 @@ export const SalesReportPage = () => {
         <StatCard
           variant="highlight"
           label="Sua Receita Líquida (85%)"
-          value={`R$ ${MOCK_SALES_SUMMARY.creatorNetShare.toFixed(2).replace('.', ',')}`}
+          value={`R$ ${Number(report.creatorNetShare || 0).toFixed(2).replace('.', ',')}`}
           subtext="Disponível para saque no PIX"
         />
 
         <StatCard
           label="Vendas Brutas Totais"
-          value={`R$ ${MOCK_SALES_SUMMARY.totalGrossSales.toFixed(2).replace('.', ',')}`}
+          value={`R$ ${Number(report.totalGrossSales || 0).toFixed(2).replace('.', ',')}`}
           subtext="Total transacionado no sistema"
         />
 
         <StatCard
           label="Repasse Plataforma (15%)"
-          value={`R$ ${MOCK_SALES_SUMMARY.platformShare.toFixed(2).replace('.', ',')}`}
+          value={`R$ ${Number(report.platformShare || 0).toFixed(2).replace('.', ',')}`}
           subtext="Custos operacionais e taxas"
         />
 
         <StatCard
           label="Total de Alunos"
-          value={MOCK_SALES_SUMMARY.totalStudents}
-          subtext="+18 novos este mês"
+          value={report.totalStudents || 0}
+          subtext="Alunas inscritas em seus cursos"
         />
       </div>
 
@@ -69,9 +81,9 @@ export const SalesReportPage = () => {
 
       {/* Sales Table */}
       <DataTable
-        title="Vendas Recentes"
+        title={`Vendas Recentes (${salesList.length})`}
         columns={columns}
-        data={MOCK_SALES_SUMMARY.recentSales}
+        data={salesList}
         renderRow={(sale) => (
           <tr key={sale.id} className="hover:bg-rose-50/20">
             <td className="p-3.5">
@@ -80,9 +92,9 @@ export const SalesReportPage = () => {
             </td>
             <td className="p-3.5 font-bold text-zinc-900">{sale.courseTitle}</td>
             <td className="p-3.5">{sale.buyerName}</td>
-            <td className="p-3.5 text-zinc-600">R$ {sale.grossAmount.toFixed(2).replace('.', ',')}</td>
+            <td className="p-3.5 text-zinc-600">R$ {Number(sale.grossAmount || 0).toFixed(2).replace('.', ',')}</td>
             <td className="p-3.5 font-extrabold text-purple-700">
-              R$ {sale.netAmount.toFixed(2).replace('.', ',')}
+              R$ {Number(sale.netAmount || 0).toFixed(2).replace('.', ',')}
             </td>
             <td className="p-3.5">
               <Badge variant="green" size="sm">{sale.status}</Badge>

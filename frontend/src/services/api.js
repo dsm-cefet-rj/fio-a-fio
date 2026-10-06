@@ -1,0 +1,106 @@
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
+const request = async (path, options) => {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    ...options,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Falha na API (${response.status}) ao acessar ${path}`);
+  }
+
+  return response.status === 204 ? null : response.json();
+};
+
+const get = (resource) => request(`/${resource}`);
+export const getById = (resource, id) => request(`/${resource}/${id}`);
+export const createRecord = (resource, data) => request(`/${resource}`, { method: 'POST', body: JSON.stringify(data) });
+export const updateRecord = (resource, id, data) => request(`/${resource}/${id}`, { method: 'PATCH', body: JSON.stringify(data) });
+export const deleteRecord = (resource, id) => request(`/${resource}/${id}`, { method: 'DELETE' });
+
+export const getUsers = () => get('users');
+export const getPosts = async ({ includeRemoved = false } = {}) => {
+  const [posts, comments, users] = await Promise.all([get('posts'), get('comments'), getUsers()]);
+  const userById = new Map(users.map(user => [user.id, user]));
+
+  return posts
+    .filter(post => includeRemoved || !['removed', 'pending'].includes(post.moderationStatus))
+    .map(post => ({
+      ...post,
+      author: {
+        ...(userById.get(post.authorId) || post.authorSnapshot),
+        verified: Boolean(userById.get(post.authorId)?.verifiedCreator || post.authorSnapshot?.verified),
+      },
+      comments: comments.filter(comment => comment.postId === post.id).map(comment => ({
+        ...comment,
+        author: userById.get(comment.authorId) || comment.authorSnapshot,
+      })),
+    }));
+};
+
+export const getStories = async () => {
+  const [stories, users] = await Promise.all([get('stories'), getUsers()]);
+  const userById = new Map(users.map(user => [user.id, user]));
+
+  return stories.map(story => {
+    const author = userById.get(story.authorId);
+    return {
+      ...story,
+      authorName: author?.name || story.authorNameSnapshot,
+      avatar: author?.avatar || story.avatarSnapshot,
+    };
+  });
+};
+
+export const getConversations = async () => {
+  const [conversations, messages, users] = await Promise.all([get('conversations'), get('messages'), getUsers()]);
+  const userById = new Map(users.map(user => [user.id, user]));
+
+  return conversations.map(conversation => {
+    const conversationMessages = messages.filter(message => message.conversationId === conversation.id);
+    const lastMessage = conversationMessages.at(-1);
+    return {
+      ...conversation,
+      participants: conversation.participantIds.map(id => userById.get(id)).filter(Boolean),
+      messages: conversationMessages,
+      lastMessage: lastMessage ? {
+        text: lastMessage.text,
+        timestamp: lastMessage.timestamp,
+        senderId: lastMessage.senderId,
+        read: lastMessage.read ?? true,
+      } : null,
+    };
+  });
+};
+
+export const getMaterials = () => get('materials');
+export const getVideoLessons = async () => {
+  const [lessons, users] = await Promise.all([get('videoLessons'), getUsers()]);
+  const userById = new Map(users.map(user => [user.id, user]));
+
+  return lessons.map(({ creatorId, creatorBio, ...lesson }) => ({
+    ...lesson,
+    creator: {
+      ...userById.get(creatorId),
+      bio: creatorBio || userById.get(creatorId)?.bio,
+    },
+  }));
+};
+
+export const getPurchases = async () => {
+  const [purchases, lessons] = await Promise.all([get('purchases'), getVideoLessons()]);
+  const lessonById = new Map(lessons.map(lesson => [lesson.id, lesson]));
+
+  return purchases.map(({ lessonId, lessonProgressPercent, ...purchase }) => ({
+    ...purchase,
+    lesson: { ...lessonById.get(lessonId), progressPercent: lessonProgressPercent },
+  }));
+};
+
+export const getSalesReport = async () => {
+  const [summary, recentSales] = await Promise.all([get('salesSummary'), get('sales')]);
+  return { ...summary, recentSales };
+};
+
+export const getAdminDashboard = () => get('adminDashboard');

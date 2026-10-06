@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { X, Send, Heart, MessageCircle, Sparkles } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { X, Send, Heart, MessageCircle } from 'lucide-react';
 import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
 import { useRole } from '../../context/RoleContext';
+import { useQueryClient } from '@tanstack/react-query';
+import { createRecord, updateRecord } from '../../services/api';
 
 export const PostCommentsModal = ({ isOpen, onClose, post, onCommentAdded }) => {
   const { currentUser } = useRole();
+  const queryClient = useQueryClient();
   const [comments, setComments] = useState([]);
   const [newCommentText, setNewCommentText] = useState('');
-  const [isCommenting, setIsCommenting] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
 
@@ -18,30 +21,40 @@ export const PostCommentsModal = ({ isOpen, onClose, post, onCommentAdded }) => 
       setIsLiked(post.isLiked || false);
       setLikesCount(post.likesCount || 0);
     }
-  }, [post]);
+  }, [post?.id, isOpen]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
     };
     if (isOpen) {
+      const previousOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = previousOverflow;
+        window.removeEventListener('keydown', handleKeyDown);
+      };
     }
     return () => {
-      document.body.style.overflow = 'auto';
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, onClose]);
 
   if (!isOpen || !post) return null;
 
-  const handleAddComment = (e) => {
+  const handleAddComment = async (e) => {
     e.preventDefault();
     if (!newCommentText.trim()) return;
 
+    const savedComment = await createRecord('comments', {
+      postId: post.id,
+      authorId: currentUser.id,
+      timeAgo: 'Agora mesmo',
+      text: newCommentText.trim(),
+    });
     const newCommentObj = {
-      id: `comment-${Date.now()}`,
+      id: savedComment.id,
       author: {
         name: currentUser?.name || 'Você',
         avatar: currentUser?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
@@ -53,49 +66,46 @@ export const PostCommentsModal = ({ isOpen, onClose, post, onCommentAdded }) => 
     const updatedComments = [...comments, newCommentObj];
     setComments(updatedComments);
     setNewCommentText('');
-    setIsCommenting(false);
+    await queryClient.invalidateQueries({ queryKey: ['posts'] });
 
     if (onCommentAdded) {
       onCommentAdded(post.id, updatedComments);
     }
   };
 
-  const toggleLike = () => {
+  const toggleLike = async () => {
+    await updateRecord('posts', post.id, { isLiked: !isLiked, likesCount: likesCount + (isLiked ? -1 : 1) });
     setIsLiked(!isLiked);
     setLikesCount(prev => (isLiked ? prev - 1 : prev + 1));
   };
 
-  return (
+  return createPortal((
     <div
-      className={`fixed inset-0 z-[100] w-screen h-screen min-h-screen flex items-center justify-center p-3 sm:p-6 transition-all duration-500 ease-out ${
-        isCommenting
-          ? 'bg-slate-950/85 backdrop-blur-3xl backdrop-saturate-150 backdrop-contrast-105'
-          : 'bg-slate-950/70 backdrop-blur-2xl backdrop-saturate-150'
-      }`}
+      className="fixed inset-0 z-[100] flex items-end justify-center bg-slate-950/70 backdrop-blur-xl sm:items-center sm:p-6"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      {/* Modal Container */}
       <div
-        className={`relative w-full max-w-xl bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/60 overflow-hidden flex flex-col max-h-[88vh] animate-scaleUp transition-all duration-300 ${
-          isCommenting ? 'ring-4 ring-rose-400/50 shadow-rose-500/30 scale-[1.01]' : ''
-        }`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Comentários da publicação"
+        className="relative flex h-[100dvh] max-h-[100dvh] w-full max-w-xl flex-col overflow-hidden rounded-t-3xl border border-white/60 bg-white shadow-2xl sm:h-auto sm:max-h-[88dvh] sm:rounded-3xl"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-rose-100/80 bg-rose-50/60">
-          <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center justify-between gap-2 px-4 py-3 sm:px-6 sm:py-4 border-b border-rose-100/80 bg-rose-50/60">
+          <div className="flex min-w-0 items-center gap-3">
             <Avatar src={post.author.avatar} alt={post.author.name} size="md" />
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="font-extrabold text-sm text-zinc-900">{post.author.name}</h3>
+                <h3 className="break-words font-extrabold text-sm text-zinc-900">{post.author.name}</h3>
                 {post.author.verified && (
                   <span className="text-[10px] bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-bold">
                     Professora
                   </span>
                 )}
               </div>
-              <p className="text-xs text-zinc-500">{post.timeAgo} • @{post.author.username}</p>
+              <p className="break-all text-xs text-zinc-500">{post.timeAgo} • @{post.author.username}</p>
             </div>
           </div>
 
@@ -109,11 +119,11 @@ export const PostCommentsModal = ({ isOpen, onClose, post, onCommentAdded }) => 
         </div>
 
         {/* Scrollable Content Area */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-4">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-4 sm:p-5 space-y-4">
           {/* Post Snippet */}
           <div className="bg-rose-50/40 rounded-2xl p-4 border border-rose-100/60 space-y-2">
-            <h4 className="font-bold text-sm text-zinc-900">{post.title}</h4>
-            <p className="text-xs text-zinc-700 leading-relaxed">{post.content}</p>
+            <h4 className="break-words font-bold text-sm text-zinc-900">{post.title}</h4>
+            <p className="break-words text-xs text-zinc-700 leading-relaxed">{post.content}</p>
 
             {post.image && (
               <div className="rounded-xl overflow-hidden border border-rose-100/80 max-h-56 mt-2">
@@ -140,9 +150,8 @@ export const PostCommentsModal = ({ isOpen, onClose, post, onCommentAdded }) => 
           </div>
 
           {/* Comment Focus Helper Bar */}
-          {isCommenting && (
+          {null && (
             <div className="flex items-center gap-2 px-3.5 py-2 bg-gradient-to-r from-rose-500 to-pink-600 text-white rounded-xl text-xs font-medium animate-fadeIn shadow-md">
-              <Sparkles size={14} className="animate-spin" />
               <span>Modo foco ativado: o fundo foi intensamente desfocado para você escrever seu comentário! 🧶</span>
             </div>
           )}
@@ -168,13 +177,13 @@ export const PostCommentsModal = ({ isOpen, onClose, post, onCommentAdded }) => 
             <div className="space-y-3">
               {comments.map((comment) => (
                 <div key={comment.id} className="flex items-start gap-3 group">
-                  <Avatar src={comment.author.avatar} size="sm" className="mt-0.5" />
+                  <Avatar src={comment.author?.avatar} alt={comment.author?.name || 'Pessoa'} size="sm" className="mt-0.5" />
                   <div className="flex-1 bg-rose-50/70 group-hover:bg-rose-50 p-3 rounded-2xl border border-rose-100/70 transition-colors">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="font-bold text-xs text-zinc-900">{comment.author.name}</span>
+                      <span className="font-bold text-xs text-zinc-900">{comment.author?.name || 'Pessoa da comunidade'}</span>
                       <span className="text-[10px] text-zinc-400 font-medium">{comment.timeAgo}</span>
                     </div>
-                    <p className="text-xs text-zinc-700 mt-1 leading-relaxed">{comment.text}</p>
+                    <p className="break-words text-xs text-zinc-700 mt-1 leading-relaxed">{comment.text}</p>
                   </div>
                 </div>
               ))}
@@ -183,7 +192,7 @@ export const PostCommentsModal = ({ isOpen, onClose, post, onCommentAdded }) => 
         </div>
 
         {/* Footer Comment Input Form */}
-        <div className="p-4 border-t border-rose-100 bg-rose-50/40">
+        <div className="shrink-0 p-3 pb-[max(.75rem,env(safe-area-inset-bottom))] sm:p-4 border-t border-rose-100 bg-rose-50/95">
           <form onSubmit={handleAddComment} className="flex items-center gap-2">
             <Avatar src={currentUser?.avatar} size="sm" />
             <div className="flex-1 relative">
@@ -192,17 +201,7 @@ export const PostCommentsModal = ({ isOpen, onClose, post, onCommentAdded }) => 
                 placeholder="Escreva um comentário carinhoso..."
                 value={newCommentText}
                 onChange={(e) => setNewCommentText(e.target.value)}
-                onFocus={() => setIsCommenting(true)}
-                onBlur={() => {
-                  if (!newCommentText.trim()) {
-                    setIsCommenting(false);
-                  }
-                }}
-                className={`w-full bg-white border text-xs text-zinc-800 rounded-2xl px-4 py-2.5 pr-10 outline-none transition-all duration-200 ${
-                  isCommenting
-                    ? 'border-rose-400 ring-2 ring-rose-400/40 shadow-xs'
-                    : 'border-rose-200 hover:border-rose-300'
-                }`}
+                className="w-full min-w-0 rounded-2xl border border-rose-200 bg-white px-3 py-2.5 pr-10 text-xs text-zinc-800 outline-none transition focus:border-rose-400 focus:ring-2 focus:ring-rose-400/40 sm:px-4"
               />
               <button
                 type="submit"
@@ -217,5 +216,5 @@ export const PostCommentsModal = ({ isOpen, onClose, post, onCommentAdded }) => 
         </div>
       </div>
     </div>
-  );
+  ), document.body);
 };

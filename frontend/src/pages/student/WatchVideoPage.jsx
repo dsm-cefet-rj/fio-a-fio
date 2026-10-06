@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { MOCK_VIDEO_LESSONS } from '../../mocks/videoLessons';
+import { getVideoLessons } from '../../services/api';
+import { useApiData } from '../../hooks/useApiData';
 import { Card, CardBody } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { ArrowLeft, PlayCircle, CheckCircle, Star } from 'lucide-react';
 
 export const WatchVideoPage = () => {
   const { id } = useParams();
-  const lesson = MOCK_VIDEO_LESSONS.find((v) => v.id === id) || MOCK_VIDEO_LESSONS[0];
-  const [activeLesson, setActiveLesson] = useState(
-    lesson.modules && lesson.modules[0] ? lesson.modules[0].lessons[0] : { title: 'Aula Inaugural', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4' }
-  );
+  const { data: lessons = [] } = useApiData('videoLessons', getVideoLessons);
+  const lesson = lessons.find((v) => v.id === id) || lessons[0];
+  const [activeLesson, setActiveLesson] = useState(null);
+  useEffect(() => {
+    if (lesson) setActiveLesson(lesson.modules?.[0]?.lessons?.[0] || { title: 'Aula Inaugural', videoUrl: 'https://www.w3schools.com/html/mov_bbb.mp4' });
+  }, [lesson]);
+  if (!lesson) return <p role="status">Carregando aula…</p>;
 
   return (
     <div className="max-w-5xl mx-auto space-y-4">

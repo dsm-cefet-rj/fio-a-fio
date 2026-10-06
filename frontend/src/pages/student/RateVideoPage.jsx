@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { MOCK_VIDEO_LESSONS } from '../../mocks/videoLessons';
+import { getVideoLessons } from '../../services/api';
+import { useApiData } from '../../hooks/useApiData';
 import { Card, CardHeader, CardBody } from '../../components/ui/Card';
 import { StarRating } from '../../components/ui/StarRating';
 import { Button } from '../../components/ui/Button';
@@ -9,11 +10,12 @@ import { ArrowLeft, Star } from 'lucide-react';
 export const RateVideoPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const lesson = MOCK_VIDEO_LESSONS.find((v) => v.id === id) || MOCK_VIDEO_LESSONS[0];
-
+  const { data: lessons = [] } = useApiData('videoLessons', getVideoLessons);
+  const lesson = lessons.find((v) => v.id === id) || lessons[0];
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [message, setMessage] = useState('');
+  if (!lesson) return <p role="status">Carregando aula…</p>;
 
   const handleSubmit = (e) => {
     e.preventDefault();

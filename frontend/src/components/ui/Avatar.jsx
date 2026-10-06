@@ -1,4 +1,5 @@
 import React from 'react';
+import { UserRound } from 'lucide-react';
 
 export const Avatar = ({ src, alt = 'Avatar', size = 'md', hasStory = false, isUnseen = false, className = '' }) => {
   const sizes = {
@@ -7,13 +8,6 @@ export const Avatar = ({ src, alt = 'Avatar', size = 'md', hasStory = false, isU
     md: 'w-10 h-10 text-sm',
     lg: 'w-14 h-14 text-base',
     xl: 'w-20 h-20 text-xl',
-  };
-
-  const getInitials = (name) => {
-    if (!name) return 'FA';
-    const parts = name.trim().split(' ');
-    if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-    return name.slice(0, 2).toUpperCase();
   };
 
   const ringStyles = hasStory
@@ -35,7 +29,7 @@ export const Avatar = ({ src, alt = 'Avatar', size = 'md', hasStory = false, isU
         />
       ) : (
         <div className="w-full h-full rounded-full bg-rose-200 text-rose-800 font-bold flex items-center justify-center aspect-square">
-          {getInitials(alt)}
+          <UserRound aria-hidden="true" className="w-1/2 h-1/2" strokeWidth={1.8} />
         </div>
       )}
     </div>

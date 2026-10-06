@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRole } from '../../context/RoleContext';
+import { createRecord } from '../../services/api';
 import { Card, CardHeader, CardBody } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -7,12 +10,23 @@ import { ArrowLeft, Camera, Sparkles } from 'lucide-react';
 
 export const CreateStoryPage = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { currentUser } = useRole();
   const [caption, setCaption] = useState('');
   const [mediaUrl, setMediaUrl] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    await createRecord('stories', {
+      authorId: currentUser.id,
+      mediaUrl,
+      caption,
+      createdAt: 'Agora',
+      hasStory: true,
+      hasUnseen: true,
+    });
+    await queryClient.invalidateQueries({ queryKey: ['stories'] });
     setMessage('Story publicado com sucesso! (Visível por 24 horas)');
     setTimeout(() => {
       navigate('/feed');

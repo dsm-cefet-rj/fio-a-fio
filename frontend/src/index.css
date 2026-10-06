@@ -4,18 +4,43 @@
 
 @layer base {
   :root {
-    --color-linhaviva: #E55B86;
-    --color-rosablush: #FEF1F4;
-    --color-rosaclaro: #EF9FB1;
-    --color-marfim: #FBF7EF;
+    --color-primary: #B94F70;
+    --color-primary-dark: #963B58;
+    --color-primary-light: #F6DDE5;
+    --color-background: #F8E9ED;
+    --color-surface: #FFFFFF;
+    --color-border: #E8CCD4;
+    --color-text: #251D20;
+    --color-text-secondary: #715B62;
+    --color-white: #FFFFFF;
+
+    /* Existing palette aliases retained for current components. */
+    --color-linhaviva: #B94F70;
+    --color-rosablush: #F6DDE5;
+    --color-rosaclaro: #D98CA1;
+    --color-marfim: #F8E9ED;
     --color-pessego: #F1DFD8;
-    --color-papelrosado: #EADED5;
-    --color-pretolinha: #17151A;
-    --color-marromrosado: #896B70;
+    --color-papelrosado: #E8CCD4;
+    --color-pretolinha: #251D20;
+    --color-marromrosado: #715B62;
   }
 
   body {
-    @apply bg-[#FBF7EF] text-[#17151A] font-sans antialiased min-h-screen flex flex-col selection:bg-[#FEF1F4] selection:text-[#E55B86];
+    @apply bg-[#F8E9ED] text-[#251D20] font-sans antialiased min-h-screen flex flex-col selection:bg-[#F6DDE5] selection:text-[#963B58];
+  }
+
+  :focus-visible {
+    outline: 3px solid #B94F70;
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
@@ -25,14 +50,14 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #FBF7EF;
+  background: #F8E9ED;
 }
 ::-webkit-scrollbar-thumb {
-  background: #EF9FB1;
+  background: #D98CA1;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #E55B86;
+  background: #B94F70;
 }
 
 @keyframes fadeIn {
@@ -54,13 +79,13 @@
 }
 
 .glass-header {
-  background: rgba(251, 247, 239, 0.92);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
 }
 
 .glass-nav {
-  background: rgba(254, 241, 244, 0.94);
+  background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
@@ -69,6 +94,3 @@
 .pb-safe {
   padding-bottom: max(5rem, env(safe-area-inset-bottom));
 }
-
-
-

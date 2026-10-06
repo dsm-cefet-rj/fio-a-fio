@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardHeader, CardBody, CardFooter } from '../ui/Card';
 import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
 import { Heart, MessageCircle, Share2 } from 'lucide-react';
 import { PostCommentsModal } from './PostCommentsModal';
+import { useQueryClient } from '@tanstack/react-query';
+import { updateRecord } from '../../services/api';
 
 export const PostCard = ({ post }) => {
+  const queryClient = useQueryClient();
   const [isLiked, setIsLiked] = useState(post.isLiked || false);
   const [likesCount, setLikesCount] = useState(post.likesCount || 0);
   const [isCommentsOpen, setIsCommentsOpen] = useState(false);
   const [comments, setComments] = useState(post.comments || []);
 
-  const toggleLike = () => {
-    setIsLiked(!isLiked);
-    setLikesCount(prev => (isLiked ? prev - 1 : prev + 1));
+  const toggleLike = async () => {
+    const nextIsLiked = !isLiked;
+    const nextLikesCount = likesCount + (isLiked ? -1 : 1);
+    await updateRecord('posts', post.id, { isLiked: nextIsLiked, likesCount: nextLikesCount });
+    setIsLiked(nextIsLiked);
+    setLikesCount(nextLikesCount);
+    await queryClient.invalidateQueries({ queryKey: ['posts'] });
   };
 
   const handleCommentAdded = (postId, updatedComments) => {
@@ -28,37 +36,46 @@ export const PostCard = ({ post }) => {
     likesCount
   };
 
+  const authorProfileLink = `/perfil?user=${post.author?.username || post.author?.id || ''}`;
+
   return (
     <>
-      <Card className="mb-6 border-[#EADED5] hover:border-[#EF9FB1] transition-all duration-300 shadow-craft bg-white">
-        <CardHeader className="flex items-center justify-between pb-2">
-          <div className="flex items-center gap-3">
-            <Avatar src={post.author.avatar} alt={post.author.name} size="md" className="border-2 border-[#EF9FB1]" />
+      <Card className="mb-6 border-[#E8CCD4] hover:border-[#D98CA1] transition-all duration-300 shadow-craft bg-white">
+        <CardHeader className="flex flex-wrap items-center justify-between gap-3 pb-2">
+          <Link to={authorProfileLink} className="flex items-center gap-3 group hover:opacity-85 transition-opacity">
+            <Avatar src={post.author?.avatar} alt={post.author?.name} size="md" className="border-2 border-[#D98CA1] group-hover:scale-105 transition-transform" />
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-sm text-[#17151A]">{post.author.name}</span>
-                {post.author.verified && (
-                  <span className="text-[10px] bg-[#FEF1F4] text-[#E55B86] px-2 py-0.5 rounded-full font-extrabold border border-[#EF9FB1]">
+                <span className="font-extrabold text-sm text-[#251D20] group-hover:text-[#B94F70] transition-colors">
+                  {post.author?.name}
+                </span>
+                {post.author?.verified && (
+                  <span className="text-[10px] bg-[#F6DDE5] text-[#B94F70] px-2 py-0.5 rounded-full font-extrabold border border-[#D98CA1]">
                     Professora 🧶
                   </span>
                 )}
               </div>
-              <p className="text-[11px] font-medium text-[#896B70]">{post.timeAgo} • @{post.author.username}</p>
+              <p className="text-[11px] font-medium text-[#715B62]">{post.timeAgo} • @{post.author?.username}</p>
             </div>
-          </div>
+          </Link>
           {post.category && (
-            <span className="text-[11px] font-extrabold px-3 py-1 bg-[#FEF1F4] text-[#E55B86] rounded-full border border-[#EF9FB1] shadow-2xs">
+          <span className="max-w-full break-words text-center text-[11px] font-extrabold px-3 py-1 bg-[#F6DDE5] text-[#B94F70] rounded-full border border-[#D98CA1] shadow-2xs">
               {post.category}
             </span>
           )}
         </CardHeader>
 
         <CardBody className="py-3.5 space-y-2.5">
-          <h3 className="font-extrabold text-base text-[#17151A] leading-snug">{post.title}</h3>
-          <p className="text-sm text-[#17151A]/85 leading-relaxed">{post.content}</p>
+          <h3
+            className="break-words font-extrabold text-base text-[#251D20] leading-snug cursor-pointer hover:text-[#B94F70] transition-colors"
+            onClick={() => setIsCommentsOpen(true)}
+          >
+            {post.title}
+          </h3>
+          <p className="break-words text-sm text-[#251D20]/85 leading-relaxed">{post.content}</p>
           {post.image && (
             <div
-              className="rounded-2xl overflow-hidden border border-[#EADED5] my-3 cursor-pointer group shadow-2xs"
+              className="rounded-2xl overflow-hidden border border-[#E8CCD4] my-3 cursor-pointer group shadow-2xs"
               onClick={() => setIsCommentsOpen(true)}
             >
               <img
@@ -70,15 +87,15 @@ export const PostCard = ({ post }) => {
           )}
         </CardBody>
 
-        <CardFooter className="flex items-center justify-between pt-2 border-t border-[#EADED5]">
-          <div className="flex items-center gap-2">
+        <CardFooter className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[#E8CCD4]">
+          <div className="flex min-w-0 flex-wrap items-center gap-1 sm:gap-2">
             <Button
               variant={isLiked ? 'secondary' : 'ghost'}
               size="sm"
               onClick={toggleLike}
-              className={isLiked ? 'text-[#E55B86] bg-[#FEF1F4] border-[#EF9FB1] font-extrabold shadow-2xs' : 'text-[#896B70] hover:text-[#E55B86] hover:bg-[#FEF1F4]/50'}
+              className={isLiked ? 'text-[#B94F70] bg-[#F6DDE5] border-[#D98CA1] font-extrabold shadow-2xs' : 'text-[#715B62] hover:text-[#B94F70] hover:bg-[#F6DDE5]/50'}
             >
-              <Heart size={16} className={isLiked ? 'fill-[#E55B86] text-[#E55B86]' : ''} />
+              <Heart size={16} className={isLiked ? 'fill-[#B94F70] text-[#B94F70]' : ''} />
               <span>{likesCount} Curtidas</span>
             </Button>
 
@@ -86,7 +103,7 @@ export const PostCard = ({ post }) => {
               variant="ghost"
               size="sm"
               onClick={() => setIsCommentsOpen(true)}
-              className="text-[#896B70] hover:text-[#E55B86] hover:bg-[#FEF1F4]/50"
+              className="text-[#715B62] hover:text-[#B94F70] hover:bg-[#F6DDE5]/50"
             >
               <MessageCircle size={16} />
               <span>{comments.length} Comentários</span>
@@ -98,7 +115,7 @@ export const PostCard = ({ post }) => {
               variant="ghost"
               size="sm"
               onClick={() => alert('Link copiado para compartilhamento!')}
-              className="text-[#896B70] hover:text-[#E55B86] hover:bg-[#FEF1F4]/50"
+              className="text-[#715B62] hover:text-[#B94F70] hover:bg-[#F6DDE5]/50"
               aria-label="Compartilhar publicação"
             >
               <Share2 size={16} />

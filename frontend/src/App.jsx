@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { RoleProvider } from './context/RoleContext';
-import { ChatProvider } from './context/ChatContext';
+import { ChatProvider } from './context/ApiChatContext';
 import { MainLayout } from './components/layout/MainLayout';
 
 // Auth Pages
@@ -45,9 +45,9 @@ import { SalesReportPage } from './pages/creator/SalesReportPage';
 
 // Admin Pages
 import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
-import { UserManagementPage } from './pages/admin/UserManagementPage';
-import { PostModerationPage } from './pages/admin/PostModerationPage';
-import { ContentManagementPage } from './pages/admin/ContentManagementPage';
+import { PersistedUserManagementPage as UserManagementPage } from './pages/admin/PersistedUserManagementPage';
+import { PersistedPostModerationPage as PostModerationPage } from './pages/admin/PersistedPostModerationPage';
+import { PersistedContentManagementPage as ContentManagementPage } from './pages/admin/PersistedContentManagementPage';
 
 export function App() {
   return (

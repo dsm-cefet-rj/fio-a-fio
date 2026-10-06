@@ -8,41 +8,41 @@ export default {
     extend: {
       colors: {
         // Nova Paleta Oficial Fio a Fio
-        linhaviva: '#E55B86',    // Rosa Linha Viva (Destaque, botões, ações, tags)
-        rosablush: '#FEF1F4',    // Rosa Blush (Fundos suaves, cards, áreas selecionadas)
-        rosaclaro: '#EF9FB1',    // Rosa Claro Editorial (Detalhes de apoio, indicadores)
-        marfim: '#FBF7EF',       // Marfim de Papel (Fundo geral da plataforma)
+        linhaviva: '#B94F70',    // Rosa Linha Viva (Destaque, botões, ações, tags)
+        rosablush: '#F6DDE5',    // Rosa Blush (Fundos suaves, cards, áreas selecionadas)
+        rosaclaro: '#D98CA1',    // Rosa Claro Editorial (Detalhes de apoio, indicadores)
+        marfim: '#F8E9ED',       // Marfim de Papel (Fundo geral da plataforma)
         pessego: '#F1DFD8',      // Pêssego Tecido (Blocos editoriais, cards)
-        papelrosado: '#EADED5',  // Papel Rosado (Bordas, divisórias, placeholders)
-        pretolinha: '#17151A',   // Preto de Linha (Texto principal, títulos, contraste)
-        marromrosado: '#896B70', // Marrom Rosado (Texto secundário, descrições)
+        papelrosado: '#E8CCD4',  // Papel Rosado (Bordas, divisórias, placeholders)
+        pretolinha: '#251D20',   // Preto de Linha (Texto principal, títulos, contraste)
+        marromrosado: '#715B62', // Marrom Rosado (Texto secundário, descrições)
 
         // Aliases para compatibilidade total com os componentes
         brand: {
-          50: '#FEF1F4',
+          50: '#F6DDE5',
           100: '#F1DFD8',
-          200: '#EADED5',
-          300: '#EF9FB1',
-          400: '#E55B86',
-          500: '#E55B86',
-          600: '#D24471',
-          700: '#B8325C',
-          800: '#896B70',
-          900: '#17151A',
+          200: '#E8CCD4',
+          300: '#D98CA1',
+          400: '#B94F70',
+          500: '#B94F70',
+          600: '#963B58',
+          700: '#7C3049',
+          800: '#715B62',
+          900: '#251D20',
         },
         rosebaby: {
-          50: '#FBF7EF',
-          100: '#FEF1F4',
+          50: '#F8E9ED',
+          100: '#F6DDE5',
           200: '#F1DFD8',
-          300: '#EADED5',
-          400: '#EF9FB1',
-          500: '#E55B86',
-          600: '#D24471',
-          700: '#B8325C',
-          800: '#896B70',
-          900: '#17151A',
+          300: '#E8CCD4',
+          400: '#D98CA1',
+          500: '#B94F70',
+          600: '#963B58',
+          700: '#7C3049',
+          800: '#715B62',
+          900: '#251D20',
         },
-        rosebg: '#FBF7EF',
+        rosebg: '#F8E9ED',
       },
       fontFamily: {
         sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
@@ -56,6 +56,3 @@ export default {
   },
   plugins: [],
 }
-
-
-

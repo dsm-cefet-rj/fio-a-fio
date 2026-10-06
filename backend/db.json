@@ -1,0 +1,813 @@
+{
+  "users": [
+    {
+      "id": "usr-1",
+      "name": "Ana Silva",
+      "username": "anacroche",
+      "email": "ana@fioafio.com",
+      "password": "1234",
+      "role": "user",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      "bio": "Apaixonada por amigurumis e fios de algodão natural 🧶💫",
+      "followersCount": 142,
+      "followingCount": 89,
+      "location": "São Paulo, SP",
+      "joinedDate": "Março 2024"
+    },
+    {
+      "id": "usr-2",
+      "name": "Maria Bordadeira",
+      "username": "mariabordadeira",
+      "email": "maria@fioafio.com",
+      "password": "1234",
+      "role": "creator",
+      "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
+      "bio": "Professora de crochê com mais de 10 anos de experiência. Especialista em cardigans e vestuário.",
+      "followersCount": 3450,
+      "followingCount": 120,
+      "location": "Belo Horizonte, MG",
+      "joinedDate": "Janeiro 2023",
+      "verifiedCreator": true
+    },
+    {
+      "id": "usr-3",
+      "name": "Júlia Crocheteira",
+      "username": "juliacroche",
+      "email": "julia@fioafio.com",
+      "password": "1234",
+      "role": "user",
+      "avatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80",
+      "bio": "Crocheteira nas horas vagas 🌸 Amante de mantas de sofás.",
+      "followersCount": 88,
+      "followingCount": 210,
+      "location": "Curitiba, PR",
+      "joinedDate": "Fevereiro 2024"
+    },
+    {
+      "id": "usr-4",
+      "name": "Admin Fio a Fio",
+      "username": "admin",
+      "email": "admin@fioafio.com",
+      "password": "admin123",
+      "role": "admin",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+      "bio": "Conta oficial de moderação e administração da comunidade Fio a Fio.",
+      "followersCount": 10500,
+      "followingCount": 0,
+      "location": "São Paulo, SP",
+      "joinedDate": "Janeiro 2023"
+    },
+    {
+      "id": "usr-5",
+      "name": "Carla Pontos",
+      "username": "carlacroche",
+      "email": "carla@fioafio.com",
+      "password": "1234",
+      "role": "creator",
+      "avatar": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
+      "bio": "Criadora de amigurumis fofos e acessórios em crochê moderno 🐰🧶",
+      "followersCount": 1200,
+      "followingCount": 95,
+      "location": "Rio de Janeiro, RJ",
+      "joinedDate": "Junho 2024",
+      "verifiedCreator": true
+    },
+    {
+      "name": "maria",
+      "username": "mary",
+      "email": "mary@gmail.com",
+      "password": "1234",
+      "role": "user",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      "bio": "",
+      "location": "",
+      "followersCount": 0,
+      "followingCount": 0,
+      "joinedDate": "outubro de 2026",
+      "id": "GblUag6JB1w"
+    },
+    {
+      "name": "leticia",
+      "username": "leticia",
+      "email": "leticia@gmail.com",
+      "password": "1234",
+      "role": "user",
+      "joinedDate": "outubro de 2026",
+      "id": "Z06gSOgOGVw"
+    },
+    {
+      "name": "bia",
+      "username": "bia",
+      "email": "bia@gmail.com",
+      "password": "1234",
+      "role": "user",
+      "joinedDate": "outubro de 2026",
+      "id": "5rD4FQ27e0k"
+    }
+  ],
+  "posts": [
+    {
+      "id": "post-1",
+      "authorId": "usr-2",
+      "title": "Dica de acabamento: Como fazer união invisível em granny squares",
+      "content": "Muitas alunas me perguntam como unir quadradinhos de crochê sem criar aquele relevo grosso na peça. O segredo que ensino nas minhas aulas é trabalhar o ponto baixíssimo pegando somente na laçadinha de trás das duas peças posicionadas direito com direito! Fica suave e maleável. Quem aqui já usa essa técnica?",
+      "category": "Dicas & Tutoriais",
+      "likesCount": 42,
+      "isLiked": false,
+      "commentsCount": 2,
+      "timeAgo": "há 15 min",
+      "createdAt": "2026-10-06T14:15:00Z"
+    },
+    {
+      "id": "post-2",
+      "authorId": "usr-1",
+      "title": "Qual fio vocês recomendam para quem está começando em Amigurumi?",
+      "content": "Meninas, comecei a treinar os primeiros bichinhos de crochê essa semana, mas estou sentindo o fio desfiar com facilidade na agulha 2.5mm. Vocês preferem 100% algodão mercerizado ou algum fio misto? Aceito sugestões de marcas e espessuras!",
+      "category": "Amigurumi",
+      "likesCount": 18,
+      "isLiked": true,
+      "commentsCount": 2,
+      "timeAgo": "há 1 hora",
+      "createdAt": "2026-10-06T13:30:00Z"
+    },
+    {
+      "id": "post-3",
+      "authorId": "usr-3",
+      "title": "Planejando quantidade de novelos para manta de casal no ponto waffle",
+      "content": "Estou apaixonada pelo ponto waffle e decidida a fazer uma manta grande para o sofá da sala. Alguém que já fez nesse ponto saberia estimar quantos metros ou novelos de fio médio (tex 590) costumam gastar? Sei que o ponto waffle consome um pouco mais de linha.",
+      "category": "Decoração",
+      "likesCount": 29,
+      "isLiked": false,
+      "commentsCount": 1,
+      "timeAgo": "há 3 horas",
+      "createdAt": "2026-10-06T11:00:00Z"
+    },
+    {
+      "id": "post-4",
+      "authorId": "usr-5",
+      "title": "Tabela de encolhimento e medidas em peças de vestuário",
+      "content": "Dica rápida para quem vende roupas sob medida: o fio de algodão natural costuma encolher entre 3% a 5% na primeira lavagem delicada. Por isso, ao tecer vestidos e croppeds, calculem sempre uma folga de vestibilidade de pelo menos 3 a 4 cm no busto e quadril!",
+      "category": "Vestuário",
+      "likesCount": 67,
+      "isLiked": false,
+      "commentsCount": 1,
+      "timeAgo": "há 1 dia",
+      "createdAt": "2026-10-05T14:00:00Z"
+    },
+    {
+      "id": "post-5",
+      "authorId": "usr-4",
+      "title": "Boas-vindas à Comunidade Oficial Fio a Fio! 🧶💖",
+      "content": "Este espaço foi criado para conectar quem ama criar com as próprias mãos. Aqui você pode trocar experiências no feed, tirar dúvidas, acessar receitas gratuitas e divulgar seus trabalhos. Convidamos todos a manterem o respeito e o carinho mútuo em todas as publicações!",
+      "category": "Comunidade",
+      "likesCount": 189,
+      "isLiked": true,
+      "commentsCount": 2,
+      "timeAgo": "há 2 dias",
+      "createdAt": "2026-10-04T10:00:00Z"
+    },
+    {
+      "authorId": "5rD4FQ27e0k",
+      "title": "Motivação",
+      "content": "há muito tempo penso em tentar aprender crochê e finalmente iniciei meus estudos",
+      "category": "Dicas & Tutoriais",
+      "likesCount": 0,
+      "isLiked": false,
+      "commentsCount": 0,
+      "timeAgo": "Agora mesmo",
+      "createdAt": "2026-10-06T18:24:26.523Z",
+      "id": "cC2jg0VcX20"
+    }
+  ],
+  "comments": [
+    {
+      "id": "c-1",
+      "text": "Essa dica da laçada de trás mudou meus acabamentos! Fica muito mais profissional.",
+      "timeAgo": "há 10 min",
+      "postId": "post-1",
+      "authorId": "usr-1"
+    },
+    {
+      "id": "c-2",
+      "text": "Eu uso essa técnica nas minhas colchas de cama também, super recomendo!",
+      "timeAgo": "há 5 min",
+      "postId": "post-1",
+      "authorId": "usr-3"
+    },
+    {
+      "id": "c-3",
+      "text": "Ana, o fio Amigurumi tradicional 100% algodão é o melhor para começar! Não desfia e desliza fácil na agulha.",
+      "timeAgo": "há 45 min",
+      "postId": "post-2",
+      "authorId": "usr-2"
+    },
+    {
+      "id": "c-4",
+      "text": "Concordo com a Maria! E use agulha soft com cabo emborrachado para não cansar o punho.",
+      "timeAgo": "há 30 min",
+      "postId": "post-2",
+      "authorId": "usr-5"
+    },
+    {
+      "id": "c-5",
+      "text": "Para uma manta desse tamanho no waffle gastei cerca de 8 novelos de 400g. Compre tudo do mesmo lote para não dar diferença de tom!",
+      "timeAgo": "há 2 horas",
+      "postId": "post-3",
+      "authorId": "usr-2"
+    },
+    {
+      "id": "c-6",
+      "text": "Muito obrigada pelo aviso sobre a folga de vestibilidade, professora Carla!",
+      "timeAgo": "há 1 dia",
+      "postId": "post-4",
+      "authorId": "usr-1"
+    },
+    {
+      "id": "c-7",
+      "text": "Parabéns pela plataforma! Estava faltando um cantinho acolhedor só para quem faz crochê.",
+      "timeAgo": "há 2 dias",
+      "postId": "post-5",
+      "authorId": "usr-2"
+    },
+    {
+      "id": "c-8",
+      "text": "Muito feliz em fazer parte! 🧶✨",
+      "timeAgo": "há 1 dia",
+      "postId": "post-5",
+      "authorId": "usr-3"
+    },
+    {
+      "postId": "post-1",
+      "authorId": "5rD4FQ27e0k",
+      "timeAgo": "Agora mesmo",
+      "text": "muito bom!",
+      "id": "RamXEeQTMSc"
+    }
+  ],
+  "stories": [
+    {
+      "id": "story-1",
+      "hasStory": true,
+      "hasUnseen": true,
+      "mediaUrl": "https://images.unsplash.com/photo-1619252584172-a83a949b6efd?w=800&auto=format&fit=crop&q=80",
+      "caption": "Escolhendo os fios para o novo curso! 🧶✨",
+      "createdAt": "há 30 min",
+      "authorId": "usr-2",
+      "authorNameSnapshot": "Maria B."
+    },
+    {
+      "id": "story-2",
+      "hasStory": true,
+      "hasUnseen": true,
+      "mediaUrl": "https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=800&auto=format&fit=crop&q=80",
+      "caption": "Cantinho do crochê organizado ☀️",
+      "createdAt": "há 2 horas",
+      "authorId": "usr-3",
+      "authorNameSnapshot": "Júlia C."
+    },
+    {
+      "id": "story-3",
+      "hasStory": true,
+      "hasUnseen": false,
+      "mediaUrl": "https://images.unsplash.com/photo-1606744824163-985d376605aa?w=800&auto=format&fit=crop&q=80",
+      "caption": "Encontro de crocheteiros em SP!",
+      "createdAt": "há 5 horas",
+      "authorId": null,
+      "authorNameSnapshot": "Rafa S.",
+      "avatarSnapshot": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80"
+    }
+  ],
+  "conversations": [
+    {
+      "id": "conv-1",
+      "unreadCount": 0,
+      "participantIds": [
+        "usr-1",
+        "usr-2"
+      ]
+    },
+    {
+      "id": "conv-2",
+      "unreadCount": 0,
+      "participantIds": [
+        "usr-1",
+        "usr-3"
+      ]
+    },
+    {
+      "id": "conv-3",
+      "unreadCount": 0,
+      "participantIds": [
+        "usr-1",
+        "usr-4"
+      ]
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg-1",
+      "senderId": "usr-2",
+      "text": "Olá Ana! Seja muito bem-vinda à comunidade Fio a Fio 🧶! Qualquer dúvida nas receitas pode me mandar por aqui.",
+      "timestamp": "Ontem 18:30",
+      "conversationId": "conv-1"
+    },
+    {
+      "id": "msg-2",
+      "senderId": "usr-1",
+      "text": "Muito obrigada, professora! Estou fazendo o cardigan de hexágonos.",
+      "timestamp": "Ontem 18:35",
+      "conversationId": "conv-1"
+    },
+    {
+      "id": "msg-3",
+      "senderId": "usr-1",
+      "text": "Oi Maria! Amei sua aula de cardigan, tirei uma dúvida sobre a medida do tamanho P!",
+      "timestamp": "10:42",
+      "conversationId": "conv-1",
+      "read": true
+    },
+    {
+      "id": "msg-201",
+      "senderId": "usr-1",
+      "text": "Oi Júlia! Vi sua publicação dos polvinhos para doação, ficou lindo demais!",
+      "timestamp": "Segunda 14:10",
+      "conversationId": "conv-2"
+    },
+    {
+      "id": "msg-202",
+      "senderId": "usr-3",
+      "text": "Ahhh muito obrigada Ana! ❤️ Dá um trabalho mas vale super a pena!",
+      "timestamp": "Segunda 14:15",
+      "conversationId": "conv-2"
+    },
+    {
+      "id": "msg-203",
+      "senderId": "usr-3",
+      "text": "Quais fios você costuma usar para amigurumi?",
+      "timestamp": "Segunda 14:16",
+      "conversationId": "conv-2",
+      "read": true
+    },
+    {
+      "id": "msg-301",
+      "senderId": "usr-4",
+      "text": "Bem-vinda à plataforma Fio a Fio! Se precisar de suporte técnico, conte conosco.",
+      "timestamp": "12 de Set 10:00",
+      "conversationId": "conv-3",
+      "read": true
+    }
+  ],
+  "materials": [
+    {
+      "id": "mat-1",
+      "authorId": "usr-4",
+      "title": "Revista Especial Crochê de Verão 2024 (PDF)",
+      "description": "Guia completo em PDF com 12 receitas detalhadas de croppeds, saídas de praia e bolsas para o verão.",
+      "type": "PDF / Revista",
+      "category": "Vestuário",
+      "downloadsCount": 1420,
+      "author": "Equipe Fio a Fio",
+      "date": "10 de Jan, 2024",
+      "fileSize": "14.2 MB",
+      "thumbnail": "https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=80",
+      "downloadUrl": "#"
+    },
+    {
+      "id": "mat-2",
+      "authorId": "usr-2",
+      "title": "Gráfico de Ponto Fantasia com Folhas 🍃",
+      "description": "Esquema gráfico vetorial em alta resolução de ponto fantasia perfeito para mantas e xales.",
+      "type": "Gráfico",
+      "category": "Pontos & Técnicas",
+      "downloadsCount": 890,
+      "author": "Maria Bordadeira",
+      "date": "22 de Fev, 2024",
+      "fileSize": "2.1 MB",
+      "thumbnail": "https://images.unsplash.com/photo-1619252584172-a83a949b6efd?w=800&auto=format&fit=crop&q=80",
+      "downloadUrl": "#"
+    },
+    {
+      "id": "mat-3",
+      "authorId": "usr-3",
+      "title": "Receita Amigurumi Coelhinho de Páscoa 🐰",
+      "description": "Passo a passo escrito em português com fotos ilustrativas para confecção de amigurumi de 15cm.",
+      "type": "Receita Gratuita",
+      "category": "Amigurumi",
+      "downloadsCount": 2310,
+      "author": "Júlia C.",
+      "date": "05 de Mar, 2024",
+      "fileSize": "5.8 MB",
+      "thumbnail": "https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=800&auto=format&fit=crop&q=80",
+      "downloadUrl": "#"
+    },
+    {
+      "id": "mat-4",
+      "authorId": "usr-4",
+      "title": "Tabela de Medidas e Cálculo de Fios em Crochê",
+      "description": "Apostila em PDF com tabelas comparativas de espessura de agulhas e cálculo de peso de fios por metro.",
+      "type": "Apostila",
+      "category": "Guia Técnico",
+      "downloadsCount": 3100,
+      "author": "Equipe Fio a Fio",
+      "date": "15 de Fev, 2024",
+      "fileSize": "3.5 MB",
+      "thumbnail": "https://images.unsplash.com/photo-1606744824163-985d376605aa?w=800&auto=format&fit=crop&q=80",
+      "downloadUrl": "#"
+    },
+    {
+      "id": "mat-5",
+      "authorId": "usr-5",
+      "title": "Receita Escrita: Chaveiro de Morango em Amigurumi 🍓",
+      "description": "Receita textual rápida, ideal para iniciantes e para aproveitar sobras de fio vermelho e verde.",
+      "type": "Receita Gratuita",
+      "category": "Amigurumi",
+      "downloadsCount": 640,
+      "author": "Carla Pontos",
+      "date": "02 de Out, 2026",
+      "fileSize": "Texto",
+      "thumbnail": "https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=800&auto=format&fit=crop&q=80",
+      "downloadUrl": "#"
+    }
+  ],
+  "videoLessons": [
+    {
+      "id": "aula-101",
+      "title": "Cardigan de Hexágonos em Crochê Moderno",
+      "subtitle": "Aprenda a criar um cardigan elegante e versátil usando a técnica do hexágono continuo.",
+      "description": "Neste curso completo, você aprenderá do zero a confeccionar um cardigan impecável. Vamos passar pela escolha dos fios ideais, cálculo de medidas para diferentes tamanhos (P ao EGG), montagem dos hexágonos, arremates invisíveis e acabamentos profissionais em ponto barra.",
+      "price": 49.9,
+      "rating": 4.9,
+      "reviewsCount": 38,
+      "duration": "2h 45min",
+      "level": "Intermediário",
+      "category": "Vestuário",
+      "thumbnail": "https://images.unsplash.com/photo-1619252584172-a83a949b6efd?w=800&auto=format&fit=crop&q=80",
+      "studentsCount": 312,
+      "requirements": [
+        "Conhecimentos básicos de crochê (correntinha, ponto alto e ponto baixo)",
+        "Agulha de crochê 4.0mm",
+        "Fio de algodão de sua preferência (aprox. 500g)",
+        "Fita métrica e tesoura"
+      ],
+      "whatYouWillLearn": [
+        "Estruturar os hexágonos perfeitos sem enrolar as bordas",
+        "Calcular a quantidade exata de fio para qualquer tamanho",
+        "União invisível de peças com agulha de tapeceiro",
+        "Acabamento de punhos e gola com caimento perfeito"
+      ],
+      "modules": [
+        {
+          "title": "Módulo 1: Apresentação e Materiais",
+          "lessons": [
+            {
+              "id": "les-1",
+              "title": "Boas-vindas e Lista de Materiais",
+              "duration": "12 min",
+              "videoUrl": "https://www.w3schools.com/html/mov_bbb.mp4"
+            },
+            {
+              "id": "les-2",
+              "title": "Escolha dos Fios e Tensão do Ponto",
+              "duration": "18 min",
+              "videoUrl": "https://www.w3schools.com/html/mov_bbb.mp4"
+            }
+          ]
+        },
+        {
+          "title": "Módulo 2: Confecção da Peça",
+          "lessons": [
+            {
+              "id": "les-3",
+              "title": "Primeiro Hexágono Passo a Passo",
+              "duration": "35 min",
+              "videoUrl": "https://www.w3schools.com/html/mov_bbb.mp4"
+            },
+            {
+              "id": "les-4",
+              "title": "Dobras e União das Costas",
+              "duration": "40 min",
+              "videoUrl": "https://www.w3schools.com/html/mov_bbb.mp4"
+            }
+          ]
+        },
+        {
+          "title": "Módulo 3: Mangas e Acabamentos",
+          "lessons": [
+            {
+              "id": "les-5",
+              "title": "Crescimento das Mangas e Gola",
+              "duration": "30 min",
+              "videoUrl": "https://www.w3schools.com/html/mov_bbb.mp4"
+            },
+            {
+              "id": "les-6",
+              "title": "Arremates Finais e Bloqueio",
+              "duration": "30 min",
+              "videoUrl": "https://www.w3schools.com/html/mov_bbb.mp4"
+            }
+          ]
+        }
+      ],
+      "creatorId": "usr-2",
+      "creatorBio": "Professora com +10 anos ensinando milhares de crocheteiras pelo Brasil."
+    },
+    {
+      "id": "aula-102",
+      "title": "Bolsa Boho Fio de Malha com Alça de Couro",
+      "subtitle": "Domine o ponto baixo centrado e crie bolsas estruturadas de alto valor de venda.",
+      "description": "Aprenda a trabalhar com fio de malha criando uma bolsa estruturada estilo Boho. O curso cobre a confecção da base oval, subida sem emenda aparente e aplicação de fechos e alças de couro sintético.",
+      "price": 35,
+      "rating": 4.8,
+      "reviewsCount": 24,
+      "duration": "1h 50min",
+      "level": "Iniciante",
+      "category": "Acessórios",
+      "thumbnail": "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800&auto=format&fit=crop&q=80",
+      "studentsCount": 184,
+      "requirements": [
+        "Conhecimento de ponto baixo"
+      ],
+      "whatYouWillLearn": [
+        "Criar bases ovais sem buracos",
+        "Estruturação de bolsa com fio de malha"
+      ],
+      "modules": [
+        {
+          "title": "Módulo Único: Passo a Passo Completo",
+          "lessons": [
+            {
+              "id": "les-b1",
+              "title": "Base e Subida da Bolsa",
+              "duration": "50 min",
+              "videoUrl": "https://www.w3schools.com/html/mov_bbb.mp4"
+            },
+            {
+              "id": "les-b2",
+              "title": "Aplicação das Alças e Forro",
+              "duration": "60 min",
+              "videoUrl": "https://www.w3schools.com/html/mov_bbb.mp4"
+            }
+          ]
+        }
+      ],
+      "creatorId": "usr-2"
+    },
+    {
+      "id": "aula-103",
+      "title": "Manta Primavera de Square Floral",
+      "subtitle": "Manta aconchegante feita de flores em alto relevo e moldura em ponto leque.",
+      "description": "Um curso relaxante e encantador para quem quer dominar o crochê modular e criar peças de decoração inesquecíveis.",
+      "price": 59.9,
+      "rating": 5,
+      "reviewsCount": 15,
+      "duration": "3h 10min",
+      "level": "Avançado",
+      "category": "Decoração",
+      "thumbnail": "https://images.unsplash.com/photo-1606744824163-985d376605aa?w=800&auto=format&fit=crop&q=80",
+      "studentsCount": 96,
+      "requirements": [
+        "Leitura de gráficos e domínio de pontos altos duplos"
+      ],
+      "whatYouWillLearn": [
+        "Flores 3D em crochê",
+        "Montagem de mantas grandes"
+      ],
+      "modules": [],
+      "creatorId": "usr-2"
+    },
+    {
+      "id": "aula-104",
+      "title": "Amigurumi do Zero: Bichinhos Fofos em Anel Mágico",
+      "subtitle": "Domine o anel mágico, aumentos e diminuições invisíveis para criar seus primeiros amigurumis.",
+      "description": "Curso pensado para iniciantes que querem aprender amigurumi com segurança, do enchimento correto ao bordado dos olhinhos.",
+      "price": 39.9,
+      "rating": 4.7,
+      "reviewsCount": 19,
+      "duration": "2h 05min",
+      "level": "Iniciante",
+      "category": "Amigurumi",
+      "thumbnail": "https://images.unsplash.com/photo-1584992236310-6edddc08acff?w=800&auto=format&fit=crop&q=80",
+      "studentsCount": 141,
+      "requirements": [
+        "Agulha 2.5mm",
+        "Fio 100% algodão para amigurumi",
+        "Fibra siliconada"
+      ],
+      "whatYouWillLearn": [
+        "Anel mágico firme",
+        "Diminuição invisível",
+        "Montagem e enchimento sem deformar"
+      ],
+      "modules": [],
+      "creatorId": "usr-5"
+    },
+    {
+      "id": "aula-105",
+      "title": "Cropped Básico Sob Medida",
+      "subtitle": "Aprenda a tirar medidas e adaptar a receita para qualquer corpo.",
+      "description": "Do cálculo da amostra ao acabamento das alças, um passo a passo para criar croppeds que vestem bem.",
+      "price": 29.9,
+      "rating": 4.8,
+      "reviewsCount": 11,
+      "duration": "1h 30min",
+      "level": "Iniciante",
+      "category": "Vestuário",
+      "thumbnail": "https://images.unsplash.com/photo-1619252584172-a83a949b6efd?w=800&auto=format&fit=crop&q=80",
+      "studentsCount": 77,
+      "requirements": [
+        "Ponto baixo e ponto alto",
+        "Fita métrica"
+      ],
+      "whatYouWillLearn": [
+        "Amostra e cálculo de pontos",
+        "Folga de vestibilidade",
+        "Alças ajustáveis"
+      ],
+      "modules": [],
+      "creatorId": "usr-5"
+    }
+  ],
+  "purchases": [
+    {
+      "id": "pur-1001",
+      "userId": "usr-1",
+      "lessonId": "aula-101",
+      "date": "15/09/2026",
+      "status": "Concluído",
+      "amount": 49.9,
+      "paymentMethod": "Cartão de Crédito",
+      "lessonProgressPercent": 40
+    },
+    {
+      "id": "pur-1002",
+      "userId": "usr-1",
+      "lessonId": "aula-102",
+      "date": "20/09/2026",
+      "status": "Concluído",
+      "amount": 35,
+      "paymentMethod": "PIX",
+      "lessonProgressPercent": 100
+    },
+    {
+      "id": "pur-1003",
+      "userId": "usr-3",
+      "lessonId": "aula-103",
+      "date": "28/09/2026",
+      "status": "Concluído",
+      "amount": 59.9,
+      "paymentMethod": "PIX",
+      "lessonProgressPercent": 15
+    },
+    {
+      "id": "pur-1004",
+      "userId": "usr-3",
+      "lessonId": "aula-104",
+      "date": "01/10/2026",
+      "status": "Concluído",
+      "amount": 39.9,
+      "paymentMethod": "Cartão de Crédito",
+      "lessonProgressPercent": 60
+    },
+    {
+      "id": "pur-1005",
+      "userId": "usr-1",
+      "lessonId": "aula-105",
+      "date": "04/10/2026",
+      "status": "Concluído",
+      "amount": 29.9,
+      "paymentMethod": "PIX",
+      "lessonProgressPercent": 0
+    }
+  ],
+  "sales": [
+    {
+      "id": "sale-1",
+      "purchaseId": "pur-1001",
+      "lessonId": "aula-101",
+      "creatorId": "usr-2",
+      "buyerId": "usr-1",
+      "courseTitle": "Cardigan de Hexágonos em Crochê Moderno",
+      "buyerName": "Ana Silva",
+      "date": "15/09/2026",
+      "grossAmount": 49.9,
+      "netAmount": 42.42,
+      "platformAmount": 7.48,
+      "status": "Aprovado"
+    },
+    {
+      "id": "sale-2",
+      "purchaseId": "pur-1002",
+      "lessonId": "aula-102",
+      "creatorId": "usr-2",
+      "buyerId": "usr-1",
+      "courseTitle": "Bolsa Boho Fio de Malha com Alça de Couro",
+      "buyerName": "Ana Silva",
+      "date": "20/09/2026",
+      "grossAmount": 35,
+      "netAmount": 29.75,
+      "platformAmount": 5.25,
+      "status": "Aprovado"
+    },
+    {
+      "id": "sale-3",
+      "purchaseId": "pur-1003",
+      "lessonId": "aula-103",
+      "creatorId": "usr-2",
+      "buyerId": "usr-3",
+      "courseTitle": "Manta Primavera de Square Floral",
+      "buyerName": "Júlia Crocheteira",
+      "date": "28/09/2026",
+      "grossAmount": 59.9,
+      "netAmount": 50.92,
+      "platformAmount": 8.98,
+      "status": "Aprovado"
+    },
+    {
+      "id": "sale-4",
+      "purchaseId": "pur-1004",
+      "lessonId": "aula-104",
+      "creatorId": "usr-5",
+      "buyerId": "usr-3",
+      "courseTitle": "Amigurumi do Zero: Bichinhos Fofos em Anel Mágico",
+      "buyerName": "Júlia Crocheteira",
+      "date": "01/10/2026",
+      "grossAmount": 39.9,
+      "netAmount": 33.92,
+      "platformAmount": 5.98,
+      "status": "Aprovado"
+    },
+    {
+      "id": "sale-5",
+      "purchaseId": "pur-1005",
+      "lessonId": "aula-105",
+      "creatorId": "usr-5",
+      "buyerId": "usr-1",
+      "courseTitle": "Cropped Básico Sob Medida",
+      "buyerName": "Ana Silva",
+      "date": "04/10/2026",
+      "grossAmount": 29.9,
+      "netAmount": 25.42,
+      "platformAmount": 4.48,
+      "status": "Aprovado"
+    }
+  ],
+  "salesSummary": {
+    "totalGrossSales": 214.6,
+    "creatorNetShare": 182.43,
+    "platformShare": 32.17,
+    "totalStudents": 2,
+    "activeCourses": 5
+  },
+  "adminDashboard": {
+    "totalUsers": 12480,
+    "activeCreators": 340,
+    "publishedCourses": 128,
+    "totalPosts": 45890,
+    "pendingModerationPosts": 4,
+    "pendingReports": 2,
+    "platformRevenueMonth": 32.17,
+    "recentUsers": [
+      {
+        "id": "usr-10",
+        "name": "Helena Castro",
+        "email": "helena@email.com",
+        "role": "user",
+        "status": "Ativo",
+        "date": "Hoje"
+      },
+      {
+        "id": "usr-11",
+        "name": "Beatriz Ramos",
+        "email": "biaramos@email.com",
+        "role": "creator",
+        "status": "Em Análise",
+        "date": "Ontem"
+      },
+      {
+        "id": "usr-12",
+        "name": "Marcos Vinicius",
+        "email": "mvcroche@email.com",
+        "role": "user",
+        "status": "Ativo",
+        "date": "18/03"
+      }
+    ],
+    "reportedPosts": [
+      {
+        "id": "rep-1",
+        "postTitle": "Venda fora da plataforma",
+        "author": "UsuarioFake123",
+        "reason": "Spam",
+        "date": "Hoje"
+      },
+      {
+        "id": "rep-2",
+        "postTitle": "Conteúdo inapropriado",
+        "author": "CrocheMaluco",
+        "reason": "Violação de Termos",
+        "date": "Ontem"
+      }
+    ]
+  },
+  "$schema": "./node_modules/json-server/schema.json"
+}

@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { MOCK_VIDEO_LESSONS } from '../../mocks/videoLessons';
+import { getVideoLessons, updateRecord } from '../../services/api';
+import { useApiData } from '../../hooks/useApiData';
+import { useQueryClient } from '@tanstack/react-query';
 import { Card, CardHeader, CardBody } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -9,20 +11,33 @@ import { ArrowLeft, Save } from 'lucide-react';
 export const EditVideoPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const lesson = MOCK_VIDEO_LESSONS.find((v) => v.id === id) || MOCK_VIDEO_LESSONS[0];
+  const queryClient = useQueryClient();
+  const { data: lessons = [] } = useApiData('videoLessons', getVideoLessons);
+  const lesson = lessons.find((v) => v.id === id);
 
-  const [title, setTitle] = useState(lesson.title || '');
-  const [price, setPrice] = useState(lesson.price || '');
-  const [description, setDescription] = useState(lesson.description || '');
+  const [title, setTitle] = useState('');
+  const [price, setPrice] = useState('');
+  const [description, setDescription] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    if (!lesson) return;
+    setTitle(lesson.title || '');
+    setPrice(lesson.price || '');
+    setDescription(lesson.description || '');
+  }, [lesson]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    await updateRecord('videoLessons', id, { title, price: Number(price), description });
+    await queryClient.invalidateQueries({ queryKey: ['videoLessons'] });
     setMessage('Informações da vídeo-aula atualizadas!');
     setTimeout(() => {
       navigate('/criador/videoaulas');
     }, 800);
   };
+
+  if (!lesson) return <p role="status">Carregando aula…</p>;
 
   return (
     <div className="max-w-xl mx-auto space-y-4">

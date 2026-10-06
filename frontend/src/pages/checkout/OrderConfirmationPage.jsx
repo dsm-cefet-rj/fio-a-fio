@@ -1,13 +1,16 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { MOCK_VIDEO_LESSONS } from '../../mocks/videoLessons';
+import { getVideoLessons } from '../../services/api';
+import { useApiData } from '../../hooks/useApiData';
 import { Card, CardBody } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { CheckCircle2, PlayCircle, BookOpen, ArrowRight } from 'lucide-react';
 
 export const OrderConfirmationPage = () => {
   const { id } = useParams();
-  const lesson = MOCK_VIDEO_LESSONS.find((v) => v.id === id) || MOCK_VIDEO_LESSONS[0];
+  const { data: lessons = [] } = useApiData('videoLessons', getVideoLessons);
+  const lesson = lessons.find((v) => v.id === id) || lessons[0];
+  if (!lesson) return <p role="status">Carregando aula…</p>;
 
   return (
     <div className="max-w-md mx-auto space-y-6 py-6">

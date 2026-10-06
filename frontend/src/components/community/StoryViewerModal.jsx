@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { X, Play, Pause, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Avatar } from '../ui/Avatar';
-import { MOCK_STORIES } from '../../mocks/stories';
+import { getStories } from '../../services/api';
+import { useApiData } from '../../hooks/useApiData';
 
 export const StoryViewerModal = ({ story: initialStory, onClose }) => {
-  const storiesList = MOCK_STORIES.filter(s => s.hasStory);
+  const { data: stories = [] } = useApiData('stories', getStories);
+  const storiesList = stories.filter(story => story.hasStory);
   const [currentIndex, setCurrentIndex] = useState(() => {
     const idx = storiesList.findIndex(s => s.id === initialStory?.id);
     return idx >= 0 ? idx : 0;
@@ -82,7 +84,7 @@ export const StoryViewerModal = ({ story: initialStory, onClose }) => {
   if (!currentStory) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#17151A]/85 backdrop-blur-xl p-4 animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#251D20]/85 backdrop-blur-xl p-4 animate-fade-in">
       {/* Ambient Blurred Background for Depth */}
       {currentStory.mediaUrl && (
         <div
@@ -94,7 +96,7 @@ export const StoryViewerModal = ({ story: initialStory, onClose }) => {
       {/* Close Button */}
       <button
         onClick={onClose}
-        className="absolute top-5 right-5 z-50 text-white hover:text-[#E55B86] p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all hover:scale-110 shadow-lg border border-white/20"
+        className="absolute top-5 right-5 z-50 text-white hover:text-[#B94F70] p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all hover:scale-110 shadow-lg border border-white/20"
         aria-label="Fechar Story"
       >
         <X size={22} />
@@ -104,7 +106,7 @@ export const StoryViewerModal = ({ story: initialStory, onClose }) => {
       {currentIndex > 0 && (
         <button
           onClick={handlePrev}
-          className="hidden sm:flex absolute left-6 z-50 text-white hover:text-[#E55B86] p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all hover:scale-110 shadow-lg border border-white/20"
+          className="hidden sm:flex absolute left-6 z-50 text-white hover:text-[#B94F70] p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all hover:scale-110 shadow-lg border border-white/20"
           aria-label="Story Anterior"
         >
           <ChevronLeft size={28} />
@@ -115,7 +117,7 @@ export const StoryViewerModal = ({ story: initialStory, onClose }) => {
       {currentIndex < storiesList.length - 1 && (
         <button
           onClick={handleNext}
-          className="hidden sm:flex absolute right-6 z-50 text-white hover:text-[#E55B86] p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all hover:scale-110 shadow-lg border border-white/20"
+          className="hidden sm:flex absolute right-6 z-50 text-white hover:text-[#B94F70] p-3 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md transition-all hover:scale-110 shadow-lg border border-white/20"
           aria-label="Próximo Story"
         >
           <ChevronRight size={28} />
@@ -124,7 +126,7 @@ export const StoryViewerModal = ({ story: initialStory, onClose }) => {
 
       {/* Main Story Card Player Container */}
       <div
-        className="relative w-full max-w-sm h-[640px] max-h-[90vh] bg-[#17151A] rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-[#EADED5]/30 select-none group z-10"
+        className="relative w-full max-w-sm h-[min(82dvh,640px)] aspect-[9/16] bg-[#251D20] rounded-3xl overflow-hidden shadow-2xl flex flex-col border border-[#E8CCD4]/30 select-none group z-10"
         onMouseDown={() => setIsPaused(true)}
         onMouseUp={() => setIsPaused(false)}
         onTouchStart={() => setIsPaused(true)}
@@ -140,7 +142,7 @@ export const StoryViewerModal = ({ story: initialStory, onClose }) => {
             return (
               <div key={st.id} className="h-1.5 bg-white/30 rounded-full flex-1 overflow-hidden backdrop-blur-xs">
                 <div
-                  className="h-full bg-[#E55B86] transition-all duration-100 ease-linear shadow-xs"
+                  className="h-full bg-[#B94F70] transition-all duration-100 ease-linear shadow-xs"
                   style={{ width: `${itemProgress}%` }}
                 />
               </div>
@@ -151,7 +153,7 @@ export const StoryViewerModal = ({ story: initialStory, onClose }) => {
         {/* Story Author Header */}
         <div className="absolute top-7 left-4 right-4 z-30 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Avatar src={currentStory.avatar} alt={currentStory.authorName} size="sm" className="border-2 border-[#E55B86]" />
+            <Avatar src={currentStory.avatar} alt={currentStory.authorName} size="sm" className="border-2 border-[#B94F70]" />
             <div className="text-white drop-shadow-md">
               <p className="text-xs font-black leading-none">{currentStory.authorName}</p>
               <p className="text-[10px] font-semibold text-white/80 mt-0.5">{currentStory.createdAt}</p>
@@ -161,7 +163,7 @@ export const StoryViewerModal = ({ story: initialStory, onClose }) => {
           {/* Pause / Play Manual Toggle Button */}
           <div className="flex items-center gap-2">
             {isPaused && (
-              <span className="bg-[#E55B86] text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-md animate-pulse">
+              <span className="bg-[#B94F70] text-white text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-md animate-pulse">
                 Pausado
               </span>
             )}
@@ -171,7 +173,7 @@ export const StoryViewerModal = ({ story: initialStory, onClose }) => {
                 e.stopPropagation();
                 setIsPaused(!isPaused);
               }}
-              className="p-2 text-white bg-black/40 hover:bg-[#E55B86] backdrop-blur-md rounded-full transition-colors border border-white/20"
+              className="p-2 text-white bg-black/40 hover:bg-[#B94F70] backdrop-blur-md rounded-full transition-colors border border-white/20"
               title={isPaused ? "Continuar Story (Espaço)" : "Pausar Story (Espaço)"}
               aria-label={isPaused ? "Continuar" : "Pausar"}
             >
@@ -199,7 +201,7 @@ export const StoryViewerModal = ({ story: initialStory, onClose }) => {
 
         {/* Caption Overlay */}
         {currentStory.caption && (
-          <div className="absolute bottom-6 left-4 right-4 z-30 bg-[#17151A]/85 backdrop-blur-md p-3.5 rounded-2xl border border-[#EADED5]/30 text-white text-xs text-center font-medium leading-relaxed shadow-lg">
+          <div className="absolute bottom-6 left-4 right-4 z-30 bg-[#251D20]/85 backdrop-blur-md p-3.5 rounded-2xl border border-[#E8CCD4]/30 text-white text-xs text-center font-medium leading-relaxed shadow-lg">
             {currentStory.caption}
           </div>
         )}

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRole } from '../../context/RoleContext';
+import { createRecord } from '../../services/api';
 import { Card, CardHeader, CardBody } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -7,6 +10,8 @@ import { ArrowLeft, Video, DollarSign, UploadCloud, Sparkles } from 'lucide-reac
 
 export const CreateVideoPage = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { currentUser } = useRole();
   const [formData, setFormData] = useState({
     title: '',
     subtitle: '',
@@ -20,8 +25,24 @@ export const CreateVideoPage = () => {
   });
   const [message, setMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const { videoUrl, ...lesson } = formData;
+    await createRecord('videoLessons', {
+      ...lesson,
+      price: Number(formData.price),
+      creatorId: currentUser.id,
+      creatorBio: currentUser.bio,
+      thumbnail: formData.thumbnail,
+      videoUrl,
+      rating: 0,
+      reviewsCount: 0,
+      studentsCount: 0,
+      requirements: [],
+      whatYouWillLearn: [],
+      modules: [],
+    });
+    await queryClient.invalidateQueries({ queryKey: ['videoLessons'] });
     setMessage('Vídeo-aula cadastrada com sucesso! Ela já está disponível no catálogo.');
     setTimeout(() => {
       navigate('/criador/videoaulas');

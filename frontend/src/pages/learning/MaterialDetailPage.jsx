@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { MOCK_MATERIALS } from '../../mocks/materials';
+import { getMaterials } from '../../services/api';
+import { useApiData } from '../../hooks/useApiData';
 import { Card, CardBody } from '../../components/ui/Card';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
@@ -8,7 +9,9 @@ import { ArrowLeft, Download, FileText, Calendar, User, HardDrive } from 'lucide
 
 export const MaterialDetailPage = () => {
   const { id } = useParams();
-  const material = MOCK_MATERIALS.find((m) => m.id === id) || MOCK_MATERIALS[0];
+  const { data: materials = [] } = useApiData('materials', getMaterials);
+  const material = materials.find((m) => m.id === id) || materials[0];
+  if (!material) return <p role="status">Carregando material…</p>;
 
   return (
     <div className="max-w-3xl mx-auto space-y-4">

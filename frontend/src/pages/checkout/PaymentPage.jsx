@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { MOCK_VIDEO_LESSONS } from '../../mocks/videoLessons';
+import { getVideoLessons } from '../../services/api';
+import { useApiData } from '../../hooks/useApiData';
+import { useQueryClient } from '@tanstack/react-query';
+import { createRecord } from '../../services/api';
+import { useRole } from '../../context/RoleContext';
 import { Card, CardHeader, CardBody } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -9,14 +13,27 @@ import { CreditCard, QrCode, ArrowLeft, CheckCircle } from 'lucide-react';
 export const PaymentPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const lesson = MOCK_VIDEO_LESSONS.find((v) => v.id === id) || MOCK_VIDEO_LESSONS[0];
-
+  const queryClient = useQueryClient();
+  const { currentUser } = useRole();
+  const { data: lessons = [] } = useApiData('videoLessons', getVideoLessons);
+  const lesson = lessons.find((v) => v.id === id) || lessons[0];
   const [paymentMethod, setPaymentMethod] = useState('pix');
   const [isProcessing, setIsProcessing] = useState(false);
+  if (!lesson) return <p role="status">Carregando aula…</p>;
 
-  const handlePay = (e) => {
+  const handlePay = async (e) => {
     e.preventDefault();
     setIsProcessing(true);
+    await createRecord('purchases', {
+      userId: currentUser.id,
+      lessonId: lesson.id,
+      lessonProgressPercent: 0,
+      date: new Date().toLocaleDateString('pt-BR'),
+      status: 'Concluído',
+      amount: lesson.price,
+      paymentMethod: paymentMethod === 'pix' ? 'PIX' : 'Cartão de Crédito',
+    });
+    await queryClient.invalidateQueries({ queryKey: ['purchases'] });
     setTimeout(() => {
       navigate(`/confirmacao-compra/${lesson.id}`);
     }, 1200);

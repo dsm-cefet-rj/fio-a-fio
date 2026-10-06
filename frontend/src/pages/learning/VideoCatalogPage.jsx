@@ -3,10 +3,13 @@ import { VideoCard } from '../../components/learning/VideoCard';
 import { SearchInput } from '../../components/ui/SearchInput';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { EmptyState } from '../../components/ui/EmptyState';
-import { MOCK_VIDEO_LESSONS } from '../../mocks/videoLessons';
+import { getVideoLessons } from '../../services/api';
+import { useApiData } from '../../hooks/useApiData';
 import { Video } from 'lucide-react';
 
 export const VideoCatalogPage = () => {
+  const { data: allVideos = [] } = useApiData('videoLessons', getVideoLessons);
+  const videos = allVideos.filter((video) => video.isActive !== false);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todas');
   const [selectedLevel, setSelectedLevel] = useState('Todos');
@@ -14,7 +17,7 @@ export const VideoCatalogPage = () => {
   const categories = ['Todas', 'Vestuário', 'Acessórios', 'Decoração', 'Amigurumi'];
   const levels = ['Todos', 'Iniciante', 'Intermediário', 'Avançado'];
 
-  const filteredVideos = MOCK_VIDEO_LESSONS.filter((video) => {
+  const filteredVideos = videos.filter((video) => {
     const matchesSearch = video.title.toLowerCase().includes(search.toLowerCase()) ||
                           video.description.toLowerCase().includes(search.toLowerCase());
     const matchesCat = selectedCategory === 'Todas' || video.category === selectedCategory;

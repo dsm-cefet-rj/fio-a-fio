@@ -66,7 +66,7 @@ export const LandingPage = () => {
 
             <div className="shrink-0">
               <Link to="/feed">
-                <Button variant="dark" size="md" className="shadow-md font-black rounded-xl bg-[#17151A] hover:bg-black text-white">
+                <Button variant="dark" size="md" className="shadow-md font-black rounded-xl bg-[#251D20] hover:bg-black text-white">
                   Entrar na Comunidade
                   <ArrowRight size={16} />
                 </Button>
@@ -89,14 +89,14 @@ export const LandingPage = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Card 1: Compartilhe -> Connected to Chat Page */}
-          <Card hoverable className="p-2 transition-all duration-300 hover:border-[#E55B86] hover:shadow-lg group">
+          <Card hoverable className="p-2 transition-all duration-300 hover:border-[#B94F70] hover:shadow-lg group">
             <Link to="/chat" className="block h-full">
               <CardBody className="space-y-3 h-full flex flex-col justify-between">
                 <div className="space-y-3">
                   <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform duration-300">
                     <MessageCircle size={24} />
                   </div>
-                  <h3 className="font-bold text-lg text-zinc-900 group-hover:text-[#E55B86] transition-colors">
+                  <h3 className="font-bold text-lg text-zinc-900 group-hover:text-[#B94F70] transition-colors">
                     Compartilhe
                   </h3>
                   <p className="text-sm text-zinc-600 leading-relaxed">
@@ -104,7 +104,7 @@ export const LandingPage = () => {
                   </p>
                 </div>
 
-                <div className="pt-2 flex items-center text-xs font-bold text-[#E55B86] group-hover:underline">
+                <div className="pt-2 flex items-center text-xs font-bold text-[#B94F70] group-hover:underline">
                   <span>Ir para o Chat</span>
                   <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -113,14 +113,14 @@ export const LandingPage = () => {
           </Card>
 
           {/* Card 2: Aprenda -> Connected to Video Lessons / Aulas Page */}
-          <Card hoverable className="p-2 transition-all duration-300 hover:border-[#E55B86] hover:shadow-lg group">
+          <Card hoverable className="p-2 transition-all duration-300 hover:border-[#B94F70] hover:shadow-lg group">
             <Link to="/videoaulas" className="block h-full">
               <CardBody className="space-y-3 h-full flex flex-col justify-between">
                 <div className="space-y-3">
                   <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform duration-300">
                     <BookOpen size={24} />
                   </div>
-                  <h3 className="font-bold text-lg text-zinc-900 group-hover:text-[#E55B86] transition-colors">
+                  <h3 className="font-bold text-lg text-zinc-900 group-hover:text-[#B94F70] transition-colors">
                     Aprenda
                   </h3>
                   <p className="text-sm text-zinc-600 leading-relaxed">
@@ -128,7 +128,7 @@ export const LandingPage = () => {
                   </p>
                 </div>
 
-                <div className="pt-2 flex items-center text-xs font-bold text-[#E55B86] group-hover:underline">
+                <div className="pt-2 flex items-center text-xs font-bold text-[#B94F70] group-hover:underline">
                   <span>Ver Vídeo-Aulas</span>
                   <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -137,7 +137,7 @@ export const LandingPage = () => {
           </Card>
 
           {/* Card 3: Ensine & Monetize -> Opens Edit Profile for regular users to change profile type */}
-          <Card hoverable className="p-2 transition-all duration-300 hover:border-[#E55B86] hover:shadow-lg group">
+          <Card hoverable className="p-2 transition-all duration-300 hover:border-[#B94F70] hover:shadow-lg group">
             <Link
               to={currentRole === 'creator' ? '/criador/videoaulas' : '/perfil/editar?focus=role'}
               className="block h-full"
@@ -147,7 +147,7 @@ export const LandingPage = () => {
                   <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xl group-hover:scale-110 transition-transform duration-300">
                     <Video size={24} />
                   </div>
-                  <h3 className="font-bold text-lg text-zinc-900 group-hover:text-[#E55B86] transition-colors">
+                  <h3 className="font-bold text-lg text-zinc-900 group-hover:text-[#B94F70] transition-colors">
                     Ensine & Monetize
                   </h3>
                   <p className="text-sm text-zinc-600 leading-relaxed">
@@ -155,7 +155,7 @@ export const LandingPage = () => {
                   </p>
                 </div>
 
-                <div className="pt-2 flex items-center text-xs font-bold text-[#E55B86] group-hover:underline">
+                <div className="pt-2 flex items-center text-xs font-bold text-[#B94F70] group-hover:underline">
                   <span>
                     {currentRole === 'creator' ? 'Gerenciar Minhas Aulas' : 'Tornar-se Criadora / Professora'}
                   </span>
@@ -169,4 +169,3 @@ export const LandingPage = () => {
     </div>
   );
 };
-

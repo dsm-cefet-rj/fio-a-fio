@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { MOCK_VIDEO_LESSONS } from '../../mocks/videoLessons';
+import { getVideoLessons } from '../../services/api';
+import { useApiData } from '../../hooks/useApiData';
 import { Card, CardHeader, CardBody, CardFooter } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { ArrowLeft, ShoppingBag, ShieldCheck, ArrowRight } from 'lucide-react';
@@ -8,7 +9,9 @@ import { ArrowLeft, ShoppingBag, ShieldCheck, ArrowRight } from 'lucide-react';
 export const CheckoutPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const lesson = MOCK_VIDEO_LESSONS.find((v) => v.id === id) || MOCK_VIDEO_LESSONS[0];
+  const { data: lessons = [] } = useApiData('videoLessons', getVideoLessons);
+  const lesson = lessons.find((v) => v.id === id) || lessons[0];
+  if (!lesson) return <p role="status">Carregando aula…</p>;
 
   const creatorShare = (lesson.price * 0.85).toFixed(2).replace('.', ',');
   const platformShare = (lesson.price * 0.15).toFixed(2).replace('.', ',');

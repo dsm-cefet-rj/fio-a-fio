@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useRole } from '../../context/RoleContext';
-import { useChat } from '../../context/ChatContext';
+import { useChat } from '../../context/ApiChatContext';
 import { Logo } from '../ui/Logo';
 import { Button } from '../ui/Button';
 import {
@@ -11,16 +11,17 @@ import {
   BookOpen,
   Video,
   Home,
-  Sparkles
+  Sparkles,
+  ShieldAlert
 } from 'lucide-react';
 
 export const Navbar = () => {
-  const { currentRole } = useRole();
+  const { currentRole, currentUser } = useRole();
   const location = useLocation();
   const { totalUnreadCount } = useChat();
 
   return (
-    <header className="sticky top-0 z-40 w-full glass-header border-b border-[#EADED5] shadow-2xs transition-all duration-300">
+    <header className="sticky top-0 z-40 w-full glass-header border-b border-[#E8CCD4] shadow-2xs transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Brand Logo - Always links to Initial Page ('/') */}
@@ -29,13 +30,13 @@ export const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1.5 bg-[#FEF1F4]/80 p-1.5 rounded-full border border-[#EADED5]">
+          <nav className="hidden md:flex items-center gap-1.5 bg-[#F6DDE5]/80 p-1.5 rounded-full border border-[#E8CCD4]">
             <Link
               to="/"
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                 location.pathname === '/'
-                  ? 'bg-[#E55B86] text-white shadow-xs'
-                  : 'text-[#17151A] hover:text-[#E55B86] hover:bg-white/60'
+                  ? 'bg-[#B94F70] text-white shadow-xs'
+                  : 'text-[#251D20] hover:text-[#B94F70] hover:bg-white/60'
               }`}
             >
               <Home size={15} />
@@ -45,8 +46,8 @@ export const Navbar = () => {
               to="/feed"
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                 location.pathname === '/feed'
-                  ? 'bg-[#E55B86] text-white shadow-xs'
-                  : 'text-[#17151A] hover:text-[#E55B86] hover:bg-white/60'
+                  ? 'bg-[#B94F70] text-white shadow-xs'
+                  : 'text-[#251D20] hover:text-[#B94F70] hover:bg-white/60'
               }`}
             >
               <Sparkles size={15} />
@@ -56,8 +57,8 @@ export const Navbar = () => {
               to="/pesquisa"
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                 location.pathname === '/pesquisa'
-                  ? 'bg-[#E55B86] text-white shadow-xs'
-                  : 'text-[#17151A] hover:text-[#E55B86] hover:bg-white/60'
+                  ? 'bg-[#B94F70] text-white shadow-xs'
+                  : 'text-[#251D20] hover:text-[#B94F70] hover:bg-white/60'
               }`}
             >
               <Search size={15} />
@@ -67,8 +68,8 @@ export const Navbar = () => {
               to="/videoaulas"
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                 location.pathname.startsWith('/videoaulas')
-                  ? 'bg-[#E55B86] text-white shadow-xs'
-                  : 'text-[#17151A] hover:text-[#E55B86] hover:bg-white/60'
+                  ? 'bg-[#B94F70] text-white shadow-xs'
+                  : 'text-[#251D20] hover:text-[#B94F70] hover:bg-white/60'
               }`}
             >
               <Video size={15} />
@@ -78,13 +79,43 @@ export const Navbar = () => {
               to="/materiais"
               className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                 location.pathname.startsWith('/materiais')
-                  ? 'bg-[#E55B86] text-white shadow-xs'
-                  : 'text-[#17151A] hover:text-[#E55B86] hover:bg-white/60'
+                  ? 'bg-[#B94F70] text-white shadow-xs'
+                  : 'text-[#251D20] hover:text-[#B94F70] hover:bg-white/60'
               }`}
             >
               <BookOpen size={15} />
               <span>Materiais</span>
             </Link>
+
+            {/* Link para Criadora se estiver logada com perfil de criadora */}
+            {currentRole === 'creator' && (
+              <Link
+                to="/criador/videoaulas"
+                className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-extrabold transition-all ${
+                  location.pathname.startsWith('/criador')
+                    ? 'bg-purple-600 text-white shadow-xs'
+                    : 'text-purple-700 hover:text-purple-900 hover:bg-purple-100/60'
+                }`}
+              >
+                <Video size={15} />
+                <span>Minhas Aulas</span>
+              </Link>
+            )}
+
+            {/* Link para Admin se for admin */}
+            {currentRole === 'admin' && (
+              <Link
+                to="/admin/dashboard"
+                className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-extrabold transition-all ${
+                  location.pathname.startsWith('/admin')
+                    ? 'bg-[#251D20] text-white shadow-xs'
+                    : 'text-[#251D20] hover:text-[#B94F70] hover:bg-white/60'
+                }`}
+              >
+                <ShieldAlert size={15} />
+                <span>Painel Admin</span>
+              </Link>
+            )}
           </nav>
 
           {/* Right Header Actions */}
@@ -92,10 +123,10 @@ export const Navbar = () => {
             {/* Top Right Site Icon Button linking to Initial Page */}
             <Link
               to="/"
-              className={`p-2.5 text-[#17151A] hover:text-[#E55B86] hover:bg-[#FEF1F4] rounded-full transition-all duration-200 ${
-                location.pathname === '/' ? 'text-[#E55B86] bg-[#FEF1F4]' : ''
+              className={`hidden sm:block p-2.5 text-[#251D20] hover:text-[#B94F70] hover:bg-[#F6DDE5] rounded-full transition-all duration-200 ${
+                location.pathname === '/' ? 'text-[#B94F70] bg-[#F6DDE5]' : ''
               }`}
-              title="Página Inicial (O que você encontra no Fio a Fio)"
+              title="Página Inicial"
               aria-label="Página Inicial"
             >
               <Home size={20} />
@@ -104,13 +135,13 @@ export const Navbar = () => {
             {/* Quick Chat Shortcut Icon */}
             <Link
               to="/chat"
-              className="relative p-2.5 text-[#17151A] hover:text-[#E55B86] hover:bg-[#FEF1F4] rounded-full transition-all duration-200"
+              className="relative p-2.5 text-[#251D20] hover:text-[#B94F70] hover:bg-[#F6DDE5] rounded-full transition-all duration-200"
               title="Mensagens Privadas"
               aria-label="Mensagens"
             >
-              <MessageCircle size={20} className={location.pathname === '/chat' ? 'text-[#E55B86] fill-[#FEF1F4]' : ''} />
+              <MessageCircle size={20} className={location.pathname === '/chat' ? 'text-[#B94F70] fill-[#F6DDE5]' : ''} />
               {totalUnreadCount > 0 && (
-                <span className="absolute top-1 right-1 bg-[#E55B86] text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow-xs animate-pulse-glow">
+                <span className="absolute top-1 right-1 bg-[#B94F70] text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow-xs animate-pulse-glow">
                   {totalUnreadCount}
                 </span>
               )}
@@ -119,10 +150,10 @@ export const Navbar = () => {
             {currentRole === 'guest' ? (
               <div className="flex items-center gap-2">
                 <Link to="/login">
-                  <Button variant="ghost" size="sm" className="rounded-full text-xs font-bold text-[#E55B86]">Entrar</Button>
+                  <Button variant="ghost" size="sm" className="rounded-full text-xs font-bold text-[#B94F70]">Entrar</Button>
                 </Link>
                 <Link to="/cadastro">
-                  <Button variant="primary" size="sm" className="rounded-full text-xs font-black bg-[#E55B86] text-white">Criar Conta</Button>
+                  <Button variant="primary" size="sm" className="rounded-full text-xs font-black bg-[#B94F70] text-white">Criar Conta</Button>
                 </Link>
               </div>
             ) : (
@@ -130,12 +161,13 @@ export const Navbar = () => {
                 to="/perfil"
                 className={`hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold transition-all border ${
                   location.pathname === '/perfil'
-                    ? 'bg-[#E55B86] text-white border-[#E55B86] shadow-2xs'
-                    : 'bg-white text-[#17151A] hover:bg-[#FEF1F4] hover:text-[#E55B86] border-[#EADED5]'
+                    ? 'bg-[#B94F70] text-white border-[#B94F70] shadow-2xs'
+                    : 'bg-white text-[#251D20] hover:bg-[#F6DDE5] hover:text-[#B94F70] border-[#E8CCD4]'
                 }`}
+                title={`Logado como: ${currentUser?.name || 'Perfil'}`}
               >
                 <User size={15} />
-                <span>Perfil</span>
+                <span>{currentUser?.name ? currentUser.name.split(' ')[0] : 'Perfil'}</span>
               </Link>
             )}
           </div>
@@ -144,5 +176,3 @@ export const Navbar = () => {
     </header>
   );
 };
-
-

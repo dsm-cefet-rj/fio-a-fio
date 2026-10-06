@@ -3,16 +3,18 @@ import { MaterialCard } from '../../components/learning/MaterialCard';
 import { SearchInput } from '../../components/ui/SearchInput';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { EmptyState } from '../../components/ui/EmptyState';
-import { MOCK_MATERIALS } from '../../mocks/materials';
+import { getMaterials } from '../../services/api';
+import { useApiData } from '../../hooks/useApiData';
 import { BookOpen } from 'lucide-react';
 
 export const MaterialsCatalogPage = () => {
+  const { data: materials = [] } = useApiData('materials', getMaterials);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Todas');
 
   const categories = ['Todas', 'Vestuário', 'Pontos & Técnicas', 'Amigurumi', 'Guia Técnico'];
 
-  const filteredMaterials = MOCK_MATERIALS.filter((material) => {
+  const filteredMaterials = materials.filter((material) => {
     const matchesSearch = material.title.toLowerCase().includes(search.toLowerCase()) ||
                           material.description.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = selectedCategory === 'Todas' || material.category === selectedCategory;
@@ -45,8 +47,8 @@ export const MaterialsCatalogPage = () => {
               onClick={() => setSelectedCategory(cat)}
               className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
                 selectedCategory === cat
-                  ? 'bg-[#E55B86] text-white shadow-2xs'
-                  : 'bg-white text-[#17151A] hover:bg-[#FEF1F4] border border-[#EADED5]'
+                  ? 'bg-[#B94F70] text-white shadow-2xs'
+                  : 'bg-white text-[#251D20] hover:bg-[#F6DDE5] border border-[#E8CCD4]'
               }`}
             >
               {cat}
